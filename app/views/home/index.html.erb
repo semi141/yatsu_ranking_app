@@ -1,0 +1,7 @@
+<% if user_signed_in? %>
+  <p>ようこそ、<%= current_user.name %> さん！</p>
+  <%= button_to 'ログアウト', destroy_user_session_path, method: :delete %>
+<% else %>
+  <%= link_to 'ログイン', new_user_session_path %> |
+  <%= link_to 'サインアップ', new_user_registration_path %>
+<% end %>
