@@ -14,24 +14,32 @@ class PostsController < ApplicationController
     if @post.save
       redirect_to @video, notice: "投稿を作成しました！"
     else
-      Rails.logger.debug(@post.errors.full_messages)  # ←ここ追加
+      Rails.logger.debug(@post.errors.full_messages)
       render :new
     end
   end
 
-  def edit; end
+  def edit
+    @post = Post.find(params[:id])
+    @video = @post.video
+  end
 
   def update
+    @post = Post.find(params[:id])
+    @video = @post.video
+
     if @post.update(post_params)
-      redirect_to videos_path, notice: "投稿を更新しました！"
+      redirect_to @video, notice: "投稿を更新しました！"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit
     end
   end
 
   def destroy
+    @post = Post.find(params[:id])
+    @video = @post.video
     @post.destroy
-    redirect_to videos_path, notice: "投稿を削除しました！"
+    redirect_to @video, notice: "投稿を削除しました！"
   end
 
   private
