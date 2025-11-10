@@ -2,3 +2,12 @@
 <p>URL: <%= @video.url %></p>
 <p>カテゴリ: <%= @video.category %></p>
 <p>投稿者: <%= @video.user&.name %></p>
+<h3>コメント一覧</h3>
+<% @video.posts.each do |post| %>
+  <div>
+    <strong><%= post.user.name %>:</strong>
+    <%= post.content %>
+  </div>
+<% end %>
+
+<%= link_to "新規コメント", new_video_post_path(@video) %>

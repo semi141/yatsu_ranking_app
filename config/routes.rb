@@ -5,7 +5,11 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  resources :videos, only: [:index, :show]
+  resources :videos, only: [:index, :show] do
+    resources :posts, only: [:new, :create]
+  end
+
+  resources :posts, only: [:edit, :update, :destroy]
 
   root "home#index"
 
