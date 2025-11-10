@@ -1,0 +1,9 @@
+<h1>動画一覧</h1>
+<ul>
+  <% @videos.each do |video| %>
+    <li>
+      <%= link_to video.title, video_path(video) %>
+      （投稿者: <%= video.user&.name %>）
+    </li>
+  <% end %>
+</ul>
