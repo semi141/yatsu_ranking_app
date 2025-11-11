@@ -8,6 +8,8 @@ class User < ApplicationRecord
       user.email = auth.info.email
       user.password = Devise.friendly_token[0, 20]
       user.name = auth.info.name
+      user.access_token = auth.credentials.token   # <- これ追加
+      user.refresh_token = auth.credentials.refresh_token # <- 必要なら
     end
   end
 end
