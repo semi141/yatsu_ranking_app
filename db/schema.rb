@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_11_081134) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_13_140527) do
   create_table "posts", force: :cascade do |t|
     t.text "content"
-    t.integer "user_id", null: false
-    t.integer "video_id", null: false
+    t.integer "user_id"
+    t.integer "video_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_11_081134) do
     t.string "uid"
     t.string "access_token"
     t.string "refresh_token"
+    t.string "token"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid"], name: "index_users_on_uid"
@@ -44,10 +45,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_11_081134) do
     t.string "title"
     t.string "url"
     t.string "category"
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "video_id"
+    t.text "description"
+    t.datetime "published_at"
     t.index ["user_id"], name: "index_videos_on_user_id"
+    t.index ["video_id"], name: "index_videos_on_video_id"
   end
 
   add_foreign_key "posts", "users"

@@ -1,5 +1,7 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
+    auth = request.env["omniauth.auth"]
+    Rails.logger.info auth.inspect
     @user = User.from_omniauth(request.env["omniauth.auth"])
 
     if @user.persisted?

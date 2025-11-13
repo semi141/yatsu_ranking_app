@@ -6,6 +6,10 @@ Rails.application.routes.draw do
   }
 
   resources :videos, only: [:index, :show] do
+    collection do
+      post :import_jaru_videos
+    end
+
     resources :posts, only: [:new, :create]
   end
 

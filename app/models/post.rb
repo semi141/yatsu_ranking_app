@@ -1,4 +1,4 @@
 class Post < ApplicationRecord
-  belongs_to :user
-  belongs_to :video
+  belongs_to :user, optional: true
+  belongs_to :video, optional: true
 end

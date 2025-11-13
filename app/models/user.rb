@@ -4,12 +4,13 @@ class User < ApplicationRecord
         :omniauthable, omniauth_providers: [:google_oauth2]
 
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
-      user.name = auth.info.name
-      user.access_token = auth.credentials.token   # <- これ追加
-      user.refresh_token = auth.credentials.refresh_token # <- 必要なら
-    end
+    user = where(provider: auth.provider, uid: auth.uid).first_or_initialize
+    user.email = auth.info.email
+    user.name = auth.info.name
+    user.password ||= Devise.friendly_token[0, 20]  # すでにパスワードがあれば上書きしない
+    user.access_token = auth.credentials.token
+    user.refresh_token = auth.credentials.refresh_token if auth.credentials.refresh_token.present?
+    user.save!
+    user
   end
 end

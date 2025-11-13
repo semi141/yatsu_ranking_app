@@ -1,9 +1,11 @@
 <h1>動画一覧</h1>
+
+<%= button_to "ジャルジャルタワーの動画を更新", import_jaru_videos_videos_path, method: :post %>
+
 <ul>
   <% @videos.each do |video| %>
     <li>
       <%= link_to video.title, video_path(video) %>
-      （投稿者: <%= video.user&.name %>）
     </li>
   <% end %>
 </ul>
