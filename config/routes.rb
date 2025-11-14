@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace :api do
+    get "video_watched/create"
+  end
   get "home/index"
 
   devise_for :users, controllers: {
