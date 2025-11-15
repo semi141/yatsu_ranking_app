@@ -4,21 +4,20 @@
   "version": "1.0",
   "description": "YouTube動画を開いたらRailsに自動登録する",
   "permissions": [
-    "tabs",
-    "activeTab",
-    "scripting"
+    "storage"
   ],
   "host_permissions": [
     "https://www.youtube.com/*",
     "http://localhost:3000/*"
   ],
-  "background": {
-    "service_worker": "background.js"
-  },
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/watch*"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
-  ]
+  ],
+  "action": {
+    "default_title": "JaruVideoWatcher"
+  }
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_13_140527) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_14_120259) do
   create_table "posts", force: :cascade do |t|
     t.text "content"
     t.integer "user_id"
@@ -36,6 +36,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_13_140527) do
     t.string "access_token"
     t.string "refresh_token"
     t.string "token"
+    t.string "youtube_token"
+    t.string "youtube_refresh_token"
+    t.datetime "youtube_expires_at"
+    t.string "api_key"
+    t.index ["api_key"], name: "index_users_on_api_key", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid"], name: "index_users_on_uid"
@@ -51,6 +56,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_13_140527) do
     t.string "video_id"
     t.text "description"
     t.datetime "published_at"
+    t.string "thumbnail"
     t.index ["user_id"], name: "index_videos_on_user_id"
     t.index ["video_id"], name: "index_videos_on_video_id"
   end
