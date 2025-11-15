@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "JaruVideoWatcher",
+  "version": "1.0",
+  "description": "YouTube動画を開いたらRailsに自動登録する",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://www.youtube.com/*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["content.js"]
+    }
+  ]
+}

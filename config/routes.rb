@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  namespace :api do
-    get "video_watched/create"
-  end
   get "home/index"
 
   devise_for :users, controllers: {
@@ -17,6 +14,10 @@ Rails.application.routes.draw do
   end
 
   resources :posts, only: [:edit, :update, :destroy]
+
+  namespace :api do
+    post 'video_watched', to: 'video_watched#create'
+  end
 
   root "home#index"
 
