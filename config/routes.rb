@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   resources :posts, only: [:edit, :update, :destroy]
 
   namespace :api do
-    post 'video_watched', to: 'video_watched#create'
+    post '/video_watched', to: 'videos#watched'
   end
 
   root "home#index"
