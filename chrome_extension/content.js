@@ -11,11 +11,10 @@ async function sendToRails(videoId) {
     const response = await fetch('http://localhost:3000/api/video_watched', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ video_id: videoId }),
-      credentials: 'include'  // ←Cookieを送る
+      credentials: 'include'  // Cookieを送る！
     });
 
     if (response.ok) {
@@ -28,7 +27,7 @@ async function sendToRails(videoId) {
   }
 }
 
-// 初回実行（2秒待機）
+// 2秒待機して実行
 setTimeout(() => {
   const videoId = getVideoId();
   if (videoId) sendToRails(videoId);
