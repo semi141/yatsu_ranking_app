@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_14_120259) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_16_070820) do
   create_table "posts", force: :cascade do |t|
     t.text "content"
     t.integer "user_id"
@@ -57,8 +57,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_14_120259) do
     t.text "description"
     t.datetime "published_at"
     t.string "thumbnail"
+    t.string "youtube_id"
     t.index ["user_id"], name: "index_videos_on_user_id"
     t.index ["video_id"], name: "index_videos_on_video_id"
+    t.index ["youtube_id"], name: "index_videos_on_youtube_id", unique: true
   end
 
   add_foreign_key "posts", "users"
