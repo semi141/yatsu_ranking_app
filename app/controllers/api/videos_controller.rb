@@ -6,7 +6,7 @@ class Api::VideosController < ApplicationController
     return head :bad_request unless video_id
 
     video = Video.find_or_create_by!(youtube_id: video_id) do |v|
-      info = YoutubeService.get_video_info(video_id)  # new じゃない！
+      info = YoutubeService.get_video_info(video_id)
       v.title = info[:title]
       v.thumbnail = info[:thumbnail]
       v.published_at = info[:published_at]
