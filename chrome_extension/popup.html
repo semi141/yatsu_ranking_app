@@ -4,97 +4,20 @@
   <meta charset="UTF-8">
   <title>奴ランキング見る奴 設定</title>
   <style>
-    body {
-      width: 320px;
-      padding: 20px;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f8f9fa;
-      color: #333;
-    }
-    h3 {
-      margin-top: 0;
-      font-size: 1.2em;
-      color: #4285f4;
-    }
-    p {
-      font-size: 0.9em;
-      margin: 10px 0;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1em;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #3367d6;
-    }
-    .status {
-      margin-top: 10px;
-      font-size: 0.85em;
-      text-align: center;
-    }
+    body { width: 320px; padding: 20px; font-family: sans-serif; background: #f8f9fa; }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { width: 100%; padding: 12px; background: #4285f4; color: white; }
+    .status { margin-top: 10px; text-align: center; }
     .success { color: green; }
     .error { color: red; }
   </style>
 </head>
 <body>
-  <h3>🔥 奴ランキング見る奴 設定</h3>
-  <p>マイページからコピーしたトークンを入力してね！</p>
-
-  <input type="text" id="token" placeholder="例: 9eea9a43920598bbaf6ba0c05714d20d58e95a58">
-
-  <button id="save">💾 保存する</button>
-
+  <h3>奴ランキング見る奴 設定</h3>
+  <input type="text" id="token" placeholder="トークンを入力">
+  <button id="save">保存する</button>
   <div class="status" id="status"></div>
 
-<script>
-  const saveBtn = document.getElementById('save');
-  const tokenInput = document.getElementById('token');
-  const statusDiv = document.getElementById('status');
-
-  // 保存ボタン
-  saveBtn.onclick = () => {
-    const token = tokenInput.value.trim();
-    if (!token) {
-      showStatus('トークンを入力してね！', 'error');
-      return;
-    }
-
-    // 直接ストレージに保存
-    chrome.storage.sync.set({ api_token: token }, () => {
-      showStatus('✅ 保存したよ！', 'success');
-    });
-  };
-
-  // 読み込み時
-  chrome.storage.sync.get('api_token', (data) => {
-    if (data.api_token) {
-      tokenInput.value = data.api_token;
-      showStatus('✅ 読み込み完了', 'success');
-    } else {
-      showStatus('トークン未設定', 'error');
-    }
-  });
-
-  function showStatus(message, type) {
-    statusDiv.textContent = message;
-    statusDiv.className = `status ${type}`;
-  }
-</script>
+  <script src="popup.js"></script>
 </body>
 </html>
