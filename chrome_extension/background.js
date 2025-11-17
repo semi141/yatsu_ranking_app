@@ -1,28 +1,80 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "VIDEO_WATCHED") {
-    chrome.storage.sync.get('api_token', (data) => {
-      const API_TOKEN = data.api_token || '';
+// background.js
 
-      if (!API_TOKEN) {
-        sendResponse({ status: "error", error: "トークンが設定されてないよ！ポップアップで入力してね" });
-        return;
+let lastVideoId = null;
+
+function checkYouTubeTab() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    const tab = tabs[0];
+    if (tab && tab.url && tab.url.includes('youtube.com/watch')) {
+      const match = tab.url.match(/[?&]v=([^&]+)/);
+      const videoId = match ? match[1] : null;
+
+      if (videoId && videoId !== lastVideoId) {
+        lastVideoId = videoId;
+        console.log("background: 新しい動画発見", videoId);
+        sendToRails(videoId);
       }
+    }
+  });
+}
 
-      fetch("http://localhost:3000/api/video_watched", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${API_TOKEN}`
-        },
-        body: JSON.stringify({ youtube_id: message.videoId }),
-        credentials: "omit"
-      })
-      .then(r => r.json().then(body => ({ status: r.status, body })))
-      .then(res => sendResponse(res))
-      .catch(err => sendResponse({ status: "error", error: err.message }));
+function sendToRails(videoId) {
+  chrome.storage.sync.get('api_token', (data) => {
+    const API_TOKEN = data.api_token || '';
 
-      return true;
+    if (!API_TOKEN) {
+      console.error("background: トークンなし");
+      return;
+    }
+
+    fetch("http://localhost:3000/api/video_watched", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_TOKEN}`
+      },
+      body: JSON.stringify({ video_id: videoId }),
+      credentials: "omit"
+    })
+    .then(r => {
+      console.log("background: レスポンスステータス", r.status);
+      
+      if (r.ok) {
+        // 200 OK なら成功！空bodyでも絶対エラー出さない
+        return r.text().then(text => {
+          if (text) {
+            try { return JSON.parse(text); }
+            catch { return { message: "登録完了" }; }
+          } else {
+            return { message: "登録完了 (empty body)" };
+          }
+        });
+      } else {
+        // エラー時はテキストで読む
+        return r.text().then(text => {
+          throw new Error(`HTTP ${r.status}: ${text || "不明なエラー"}`);
+        });
+      }
+    })
+    .then(body => {
+      console.log("background: 完全に成功！", body);
+    })
+    .catch(err => {
+      console.error("background: 本当に失敗", err);
     });
-    return true;
+  });
+}
+
+// イベントリスナー
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete' && tab.url && tab.url.includes('youtube.com/watch')) {
+    setTimeout(checkYouTubeTab, 2000);
   }
 });
+
+chrome.tabs.onActivated.addListener(() => {
+  checkYouTubeTab();
+});
+
+checkYouTubeTab();
+setInterval(checkYouTubeTab, 5000);

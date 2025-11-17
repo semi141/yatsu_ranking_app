@@ -6,25 +6,16 @@
 
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
-
   "host_permissions": [
     "https://www.youtube.com/*",
     "http://localhost:3000/*"
   ],
-
   "background": {
     "service_worker": "background.js"
   },
-
-  "content_scripts": [
-    {
-      "matches": ["https://www.youtube.com/watch*"],
-      "js": ["content.js"],
-      "run_at": "document_end"
-    }
-  ],
 
   "action": {
     "default_title": "奴ランキング見る奴",

@@ -1,11 +1,10 @@
-# app/controllers/api/videos_controller.rb
 class Api::VideosController < ApplicationController
-  # before_action :authenticate_user!  # ← コメントアウト済み！
   skip_before_action :verify_authenticity_token, only: [:watched]
 
   def watched
     video_id = params[:video_id]
     return head :bad_request unless video_id
+    render json: { message: "登録完了", video_id: video_id }, status: :ok
 
     # テスト用に固定ユーザー（User.first）を使う！
     user = User.first
