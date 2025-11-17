@@ -1,6 +1,14 @@
 <h1>検索結果</h1>
 
-<!-- あとで検索結果をここに並べる -->
-<div>
-  <p>検索結果がここに表示されます</p>
-</div>
+<% if @videos.any? %>
+  <ul>
+    <% @videos.each do |video| %>
+      <li>
+        <%= link_to video.title, video_path(video) %>
+        <span>(全体順位: <%= video.global_rank %>, 自分の順位: <%= video.user_rank(current_user) %>)</span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>検索結果は見つかりませんでした……</p>
+<% end %>

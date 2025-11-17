@@ -8,15 +8,20 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
-  resources :videos, only: [:index, :show] do
+  resources :videos do
     collection do
       post :import_jaru_videos
+    end
+
+    member do
+      post :remove_tag
     end
 
     resources :posts, only: [:new, :create]
   end
 
   resources :posts, only: [:edit, :update, :destroy]
+
 
   namespace :api do
     post '/video_watched', to: 'videos#watched'

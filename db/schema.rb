@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_17_112061) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_17_113100) do
   create_table "posts", force: :cascade do |t|
     t.text "content"
     t.integer "user_id"
@@ -91,6 +91,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_112061) do
     t.datetime "published_at"
     t.string "thumbnail"
     t.string "youtube_id"
+    t.integer "watch_count"
     t.index ["user_id"], name: "index_videos_on_user_id"
     t.index ["video_id"], name: "index_videos_on_video_id"
     t.index ["youtube_id"], name: "index_videos_on_youtube_id", unique: true

@@ -7,8 +7,8 @@
   </div>
 
   <div>
-    <label>カテゴリで絞り込み：</label>
-    <%= f.select :category, options_for_select(["全て", "お笑い", "ゲーム", "音楽"]), include_blank: false %>
+  <label>タグで絞り込み：</label>
+  <%= f.select :tag, options_for_select(Video.tag_counts_on(:tags).pluck(:name)), include_blank: "全て" %>
   </div>
 
   <div>

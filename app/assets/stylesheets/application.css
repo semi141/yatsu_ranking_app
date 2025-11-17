@@ -1,15 +1,29 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS (and SCSS, if configured) file within this directory, lib/assets/stylesheets, or any plugin's
- * vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+#tag-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tag-item {
+  display: inline-block;
+  background: #eee;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.tag-name {
+  margin-right: 8px;
+}
+
+/* 最初はバツボタン非表示 */
+.delete-btn {
+  display: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: red;
+}
+
+.edit-mode .delete-btn {
+  display: inline;
+}

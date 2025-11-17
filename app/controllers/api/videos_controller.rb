@@ -21,7 +21,6 @@ class Api::VideosController < ApplicationController
     end
 
     Post.find_or_create_by!(user: user, video: video) do |p|
-      p.content = "YouTubeで視聴！自動登録"
     end
 
     head :ok

@@ -1,6 +1,4 @@
 <h1><%= @video.title %></h1>
-<p>URL: <%= @video.url.presence || "未登録" %></p>
-<p>カテゴリ: <%= @video.category.presence || "未登録" %></p>
 
 <h3>コメント一覧</h3>
 <% valid_posts = @video.posts.select { |post| post.content.present? } %>
@@ -8,7 +6,6 @@
   <% valid_posts.each do |post| %>
     <div>
       <p><%= post.content %></p>
-      <p>投稿者: <%= current_user.name %></p>
 
       <% if current_user == post.user %>
         <%= link_to "編集", edit_post_path(post), class: "btn btn-primary" %> |
@@ -20,4 +17,36 @@
   <p>まだコメントはありません</p>
 <% end %>
 
-<%= link_to "新規コメント", new_video_post_path(@video) %>
+<%= link_to "コメントを投稿する", new_video_post_path(@video) %>
+
+<br><br>
+
+<h3>タグ</h3>
+
+<% if @video.tag_list.any? %>
+  <ul id="tag-list">
+    <% @video.tag_list.each do |tag| %>
+      <li class="tag-item" data-tag="<%= tag %>">
+        <span class="tag-name"><%= tag %></span>
+        <span class="delete-btn">&times;</span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>タグはまだありません</p>
+<% end %>
+
+<button id="edit-tags-btn">タグ編集モード</button>
+
+<br><br>
+
+<%= form_with(model: @video, url: video_path(@video), method: :patch, local: true) do |f| %>
+
+  <div>
+    <label>新しいタグ追加（カンマ区切りOK）</label><br>
+    <%= text_field_tag "video[new_tags]" %>
+  </div><br>
+
+  <%= f.submit "タグを追加", class: "btn" %>
+
+<% end %>
