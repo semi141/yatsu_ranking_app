@@ -1,34 +1,28 @@
-console.log("ジャルジャル拡張: 起動！");
+console.log("奴ランキング見る奴: 起動！");
 
 function getVideoId() {
   const match = location.href.match(/[?&]v=([^&]+)/);
   return match ? match[1] : null;
 }
 
-async function sendToRails(videoId) {
-  console.log("送信中...", videoId);
-  try {
-    const response = await fetch('http://localhost:3000/api/video_watched', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ video_id: videoId }),
-      credentials: 'include'  // Cookieを送る！
-    });
+// ページ読み込み後に実行
+document.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => {
+    const videoId = getVideoId();
+    if (videoId) {
+      console.log("動画ID発見:", videoId);
 
-    if (response.ok) {
-      console.log('登録完了！', videoId);
-    } else {
-      console.error('失敗', response.status);
+      // background.js にメッセージ送信
+      chrome.runtime.sendMessage({
+        type: "VIDEO_WATCHED",
+        videoId: videoId
+      }, (response) => {
+        if (response?.status === "success") {
+          console.log("✅ 奴アプリに登録完了！", response.body);
+        } else {
+          console.error("❌ 登録失敗:", response?.error || response);
+        }
+      });
     }
-  } catch (e) {
-    console.error('エラー', e);
-  }
-}
-
-// 2秒待機して実行
-setTimeout(() => {
-  const videoId = getVideoId();
-  if (videoId) sendToRails(videoId);
-}, 2000);
+  }, 2000); // YouTubeの読み込み待ち
+});

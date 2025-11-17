@@ -1,15 +1,23 @@
 {
   "manifest_version": 3,
-  "name": "JaruVideoWatcher",
+  "name": "奴ランキング見る奴",
   "version": "1.0",
-  "description": "YouTube動画を開いたらRailsに自動登録する",
+  "description": "YouTube動画視聴を奴アプリに自動登録する拡張",
+
   "permissions": [
-    "storage"
+    "storage",
+    "activeTab"
   ],
+
   "host_permissions": [
     "https://www.youtube.com/*",
     "http://localhost:3000/*"
   ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/watch*"],
@@ -17,7 +25,9 @@
       "run_at": "document_end"
     }
   ],
+
   "action": {
-    "default_title": "JaruVideoWatcher"
+    "default_title": "奴ランキング見る奴",
+    "default_popup": "popup.html"
   }
 }
