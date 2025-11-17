@@ -1,6 +1,17 @@
-<h1>検索ページ</h1>
+<h1>動画検索</h1>
 
-<!-- あとで検索フォームをここに置く -->
-<div>
-  <p>ここに検索フォームが入ります</p>
-</div>
+<%= form_with url: search_results_path, method: :get, local: true do |f| %>
+  <div>
+    <label>タイトルで検索：</label>
+    <%= f.text_field :keyword, placeholder: "動画タイトルを入力" %>
+  </div>
+
+  <div>
+    <label>カテゴリで絞り込み：</label>
+    <%= f.select :category, options_for_select(["全て", "お笑い", "ゲーム", "音楽"]), include_blank: false %>
+  </div>
+
+  <div>
+    <%= f.submit "検索" %>
+  </div>
+<% end %>

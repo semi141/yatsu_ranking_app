@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
   root "home#index"
 
+  get 'search', to: 'search#index'  
+
   get 'search/results', to: 'search#results'
 
   # Reveal health status on /up
