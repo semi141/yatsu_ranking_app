@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "search/index"
+  get "search/results"
   get "users/show"
   get "home/index"
 
@@ -28,6 +30,8 @@ Rails.application.routes.draw do
   end
 
   root "home#index"
+
+  get 'search/results', to: 'search#results'
 
   # Reveal health status on /up
   get "up" => "rails/health#show", as: :rails_health_check

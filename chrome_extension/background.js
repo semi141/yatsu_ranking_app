@@ -1,5 +1,3 @@
-// background.js
-
 let lastVideoId = null;
 
 function checkYouTubeTab() {
@@ -40,7 +38,6 @@ function sendToRails(videoId) {
       console.log("background: レスポンスステータス", r.status);
       
       if (r.ok) {
-        // 200 OK なら成功！空bodyでも絶対エラー出さない
         return r.text().then(text => {
           if (text) {
             try { return JSON.parse(text); }
