@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "users/show"
   get "home/index"
 
   devise_for :users, controllers: {
@@ -17,6 +18,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     post '/video_watched', to: 'videos#watched'
+  end
+
+  get '/mypage', to: 'users#show', as: :mypage
+  post '/users/regenerate_token', to: 'users#regenerate_token', as: :regenerate_token_users
+
+  authenticated :user do
+    root to: 'users#show', as: :authenticated_root
   end
 
   root "home#index"
