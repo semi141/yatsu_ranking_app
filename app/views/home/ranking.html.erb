@@ -27,15 +27,22 @@
 
   <!-- ランキング表示 -->
   <div class="tab-content mt-3">
+    <!-- 自分ランキングタブ -->
     <div class="tab-pane fade show active" id="my" role="tabpanel">
       <% if user_signed_in? %>
-        <p>ここに自分ランキングを表示するよ～！</p>
+        <% @my_rankings.each_with_index do |video, index| %>
+          <p><%= index + 1 %>. <%= video.title %>（<%= video.posts.count %> 回視聴）</p>
+        <% end %>
       <% else %>
         <p>ログインしてください</p>
       <% end %>
     </div>
+
+    <!-- 全体ランキングタブ -->
     <div class="tab-pane fade" id="all" role="tabpanel">
-      <p>ここに全体ランキングが入るよ！</p>
+      <% @all_rankings.each_with_index do |video, index| %>
+        <p><%= index + 1 %>. <%= video.title %>（<%= video.posts.count %> 回視聴）</p>
+      <% end %>
     </div>
   </div>
 </div>
