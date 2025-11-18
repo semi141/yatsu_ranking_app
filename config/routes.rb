@@ -31,10 +31,10 @@ Rails.application.routes.draw do
   post '/users/regenerate_token', to: 'users#regenerate_token', as: :regenerate_token_users
 
   authenticated :user do
-    root to: 'users#show', as: :authenticated_root
+    root to: 'home#ranking', as: :authenticated_root
   end
 
-  root "home#index"
+  root "home#ranking"
 
   get 'search', to: 'search#index'  
 
