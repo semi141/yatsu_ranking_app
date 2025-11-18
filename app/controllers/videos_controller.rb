@@ -12,14 +12,16 @@ class VideosController < ApplicationController
   def update
     @video = Video.find(params[:id])
 
-    # チェックされているタグ（=残すタグ）
-    selected_tags = params[:video][:tag_list] || []
+    # 今あるタグを基礎にする
+    selected_tags = @video.tag_list.map(&:strip)
 
-    # 新規追加タグ（カンマ区切り対応）
+    # 新規追加タグ（カンマ区切り）
     if params[:video][:new_tags].present?
       new_tags = params[:video][:new_tags].split(",").map(&:strip)
       selected_tags += new_tags
     end
+
+    selected_tags.uniq!  # 重複あったら消す
 
     @video.tag_list = selected_tags
 
