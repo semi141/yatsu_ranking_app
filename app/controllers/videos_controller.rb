@@ -3,6 +3,13 @@ class VideosController < ApplicationController
 
   def index
     @videos = Video.all
+
+    case params[:sort]
+    when "desc"
+      @videos = @videos.order(watch_count: :desc)
+    when "asc"
+      @videos = @videos.order(watch_count: :asc)
+    end
   end
 
   def show

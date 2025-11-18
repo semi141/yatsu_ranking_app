@@ -1,9 +1,22 @@
 <h1>動画一覧</h1>
 
-<ul>
-  <% @videos.each do |video| %>
-    <li>
-      <%= link_to video.title, video_path(video) %>
-    </li>
-  <% end %>
-</ul>
+<%= form_with url: videos_path, method: :get, local: true do %>
+  <%= select_tag :sort,
+        options_for_select([
+          ["視聴回数 多い順", "desc"],
+          ["視聴回数 少ない順", "asc"]
+        ], params[:sort]),
+        onchange: "this.form.submit();" %>
+<% end %>
+
+<% if @videos.any? %>
+  <ul>
+    <% @videos.each do |video| %>
+      <li>
+        <%= link_to video.title, video_path(video) %><br>
+        <span>(全体順位: <%= video.global_rank %>, 自分の順位: <%= video.user_rank(current_user) %>)</span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+<% end %>
