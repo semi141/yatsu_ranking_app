@@ -1,15 +1,19 @@
 <h1><%= @video.title %></h1>
 
 <h3>コメント一覧</h3>
-<% valid_posts = @video.posts.select { |post| post.content.present? } %>
+
+<% valid_posts = @video.posts.select { |post|
+     post.content.present? && post.content != "YouTubeで視聴！自動登録"
+   } %>
+
 <% if valid_posts.any? %>
   <% valid_posts.each do |post| %>
     <div>
       <p><%= post.content %></p>
 
       <% if current_user == post.user %>
-        <%= link_to "編集", edit_post_path(post), class: "btn btn-primary" %> |
-        <%= button_to "削除", post_path(post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+        <%= link_to "編集", edit_post_path(post) %> |
+        <%= button_to "削除", post_path(post), method: :delete, data: { confirm: "本当に削除しますか？" } %>
       <% end %>
     </div>
   <% end %>
