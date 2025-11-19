@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_17_113100) do
+ActiveRecord::Schema[7.2].define(version: 2025_11_19_100005) do
   create_table "posts", force: :cascade do |t|
     t.text "content"
     t.integer "user_id"
@@ -97,8 +97,20 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_17_113100) do
     t.index ["youtube_id"], name: "index_videos_on_youtube_id", unique: true
   end
 
+  create_table "watches", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "video_id", null: false
+    t.integer "watched_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_watches_on_user_id"
+    t.index ["video_id"], name: "index_watches_on_video_id"
+  end
+
   add_foreign_key "posts", "users"
   add_foreign_key "posts", "videos"
   add_foreign_key "taggings", "tags"
   add_foreign_key "videos", "users"
+  add_foreign_key "watches", "users"
+  add_foreign_key "watches", "videos"
 end

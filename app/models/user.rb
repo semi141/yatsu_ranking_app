@@ -8,6 +8,9 @@ class User < ApplicationRecord
 
   has_many :posts, dependent: :destroy
   has_many :videos, through: :posts
+  
+  has_many :watches, dependent: :destroy
+  has_many :watched_videos, through: :watches, source: :video
 
   # Google OAuthでログイン/登録してきたときの処理
   def self.from_omniauth(auth)

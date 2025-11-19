@@ -25,7 +25,9 @@ function sendToRails(videoId) {
       return;
     }
 
-    fetch("http://localhost:3000/api/video_watched", {
+    // chrome_extension/background.js の fetch の直前に追加
+    console.log("【奴ランキング】送信開始 →", videoId);
+    fetch("http://localhost:3000/api/videos/watched", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

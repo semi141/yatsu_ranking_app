@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
 
   namespace :api do
-    post '/video_watched', to: 'videos#watched'
+    post 'videos/watched', to: 'videos#watched'
   end
 
   get '/mypage', to: 'users#show', as: :mypage

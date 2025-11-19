@@ -4,6 +4,9 @@ class Video < ApplicationRecord
   validates :youtube_id, presence: true, uniqueness: true
   acts_as_taggable_on :tags
 
+  has_many :watches, dependent: :destroy
+  has_many :watchers, through: :watches, source: :user
+
   # 全体のランキング
   def global_rank
     Video.all.order(watch_count: :desc).pluck(:id).index(self.id) + 1
