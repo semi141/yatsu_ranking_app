@@ -8,8 +8,17 @@ class Api::VideosController < ApplicationController
 
     user = current_user || User.find_by(email: 'test@example.com') || User.create!(email: 'test@example.com', password: 'password123')
 
+    info = YoutubeService.get_video_info(youtube_id)
+
+    puts "DEBUG: channel_id = #{info[:channel_id]}"
+    puts "DEBUG: info = #{info.inspect}"
+
+    if info.nil? || info[:channel_id].to_s != "UChwgNUWPM-ksOP3BbfQHS5Q"
+      Rails.logger.debug "Forbidden: channel_id=#{info&.[](:channel_id)}"
+      return head :forbidden
+    end
+
     video = Video.find_or_create_by!(youtube_id: youtube_id) do |v|
-      info = YoutubeService.get_video_info(youtube_id)
       v.title        = info[:title]
       v.thumbnail    = info[:thumbnail]
       v.published_at = info[:published_at]

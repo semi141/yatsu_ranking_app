@@ -19,9 +19,10 @@ class YoutubeService
     snippet = item["snippet"]
 
     {
-      title: snippet["title"],
-      description: snippet["description"],
-      published_at: snippet["publishedAt"]
+      title:        snippet["title"],
+      description:  snippet["description"],
+      published_at: snippet["publishedAt"],
+      channel_id:   snippet["channelId"]
     }
   rescue => e
     Rails.logger.error "YouTube API error: #{e.message}"
