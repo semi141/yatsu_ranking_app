@@ -2,3 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 import "./tag_edit"
+import * as bootstrap from "bootstrap"

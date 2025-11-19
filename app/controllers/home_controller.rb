@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def ranking
+    @tab = params[:tab] || "my"
     # 全体ランキング（みんなの視聴回数合計）
     @all_rankings = Video.select('videos.*, COUNT(posts.id) AS posts_count')
                         .left_joins(:posts)

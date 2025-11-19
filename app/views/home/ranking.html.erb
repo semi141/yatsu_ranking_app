@@ -1,6 +1,6 @@
 <div class="container mt-5">
-  <!-- 検索バーそのまま -->
-  <div class="row justify-content-center mb-4">
+  <!-- 検索バー -->
+  <div class="row justify-center mb-4">
     <div class="col-md-6">
       <%= form_with url: search_path, method: :get, local: true do |f| %>
         <div class="input-group">
@@ -11,44 +11,56 @@
     </div>
   </div>
 
-  <!-- ここがポイント！data-turbo="false" をタブ全体の直前にだけ付ける -->
-  <div data-turbo="false">
-    <ul class="nav nav-tabs justify-content-center mb-4" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="my-tab" data-bs-toggle="tab" href="#my" role="tab" aria-selected="true">自分ランキング</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="false">全体ランキング</a>
-      </li>
-    </ul>
+  <!-- タブ風ボタン -->
+  <div class="text-center mb-5">
+    <div class="btn-group" role="group">
+      <%= link_to "自分ランキング", root_path, 
+          class: "btn #{params[:tab] == 'all' ? 'btn-outline-primary' : 'btn-primary'} px-4" %>
+      <%= link_to "全体ランキング", root_path(tab: "all"), 
+          class: "btn #{params[:tab] == 'all' ? 'btn-primary' : 'btn-outline-primary'} px-4" %>
+    </div>
+  </div>
 
-    <div class="tab-content">
-      <!-- 自分ランキング -->
-      <div class="tab-pane fade show active" id="my" role="tabpanel" aria-labelledby="my-tab">
-        <% if user_signed_in? && @my_rankings.present? %>
-          <% @my_rankings.each_with_index do |video, index| %>
-            <% my_count = video.posts.where(user: current_user).count %>
-            <p class="mb-2">
-              <strong><%= index + 1 %>.</strong> <%= video.title %>
-              <span class="text-primary">（あなたは <%= my_count %>回視聴）</span>
-            </p>
-          <% end %>
-        <% elsif user_signed_in? %>
-          <p class="text-muted text-center">まだ視聴履歴がありません…</p>
-        <% else %>
-          <p class="text-center">ログインすると自分のランキングが見れます！</p>
-        <% end %>
-      </div>
-
-      <!-- 全体ランキング -->
-      <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+  <!-- 表示切り替え -->
+  <% if params[:tab] == "all" %>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4 text-success">全体ランキング</h3>
         <% @all_rankings.each_with_index do |video, index| %>
-          <p class="mb-2">
-            <strong><%= index + 1 %>.</strong> <%= video.title %>
-            <span class="text-success">（みんなで <%= video.posts.count %>回視聴）</span>
-          </p>
+          <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded hover-bg-light">
+            <div>
+              <strong class="text-primary fs-4"><%= index + 1 %></strong>
+              <%= link_to video_path(video), class: "text-decoration-none text-dark fw-bold" do %>
+                <%= video.title %>
+              <% end %>
+            </div>
+            <span class="badge bg-success fs-6">視聴回数<%= video.posts.count %>回</span>
+          </div>
         <% end %>
       </div>
     </div>
-  </div>
+
+  <% else %>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="card-title text-center mb-4 text-primary">自分ランキング</h3>
+        <% if user_signed_in? && @my_rankings.present? %>
+          <% @my_rankings.each_with_index do |video, index| %>
+            <% my_count = video.posts.where(user: current_user).count %>
+            <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded hover-bg-light">
+              <div>
+                <strong class="text-primary fs-4"><%= index + 1 %></strong>
+                <%= link_to video_path(video), class: "text-decoration-none text-dark fw-bold" do %>
+                  <%= video.title %>
+                <% end %>
+              </div>
+              <span class="badge bg-primary fs-6">視聴回数<%= my_count %>回</span>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-center text-muted mt-4">まだ視聴履歴がありません…<br>ジャルジャル見てランキング入りさせよう！</p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 </div>
