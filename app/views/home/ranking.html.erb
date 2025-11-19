@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <!-- 検索バー -->
+  <!-- 検索バーそのまま -->
   <div class="row justify-content-center mb-4">
     <div class="col-md-6">
       <%= form_with url: search_path, method: :get, local: true do |f| %>
@@ -11,38 +11,44 @@
     </div>
   </div>
 
-  <!-- タブ切り替え -->
-  <ul class="nav nav-tabs justify-content-center" id="rankingTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="my-tab" data-bs-toggle="tab" data-bs-target="#my" type="button" role="tab">
-        自分ランキング
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab">
-        全体ランキング
-      </button>
-    </li>
-  </ul>
+  <!-- ここがポイント！data-turbo="false" をタブ全体の直前にだけ付ける -->
+  <div data-turbo="false">
+    <ul class="nav nav-tabs justify-content-center mb-4" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="my-tab" data-bs-toggle="tab" href="#my" role="tab" aria-selected="true">自分ランキング</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="all-tab" data-bs-toggle="tab" href="#all" role="tab" aria-selected="false">全体ランキング</a>
+      </li>
+    </ul>
 
-  <!-- ランキング表示 -->
-  <div class="tab-content mt-3">
-    <!-- 自分ランキングタブ -->
-    <div class="tab-pane fade show active" id="my" role="tabpanel">
-      <% if user_signed_in? %>
-        <% @my_rankings.each_with_index do |video, index| %>
-          <p><%= index + 1 %>. <%= video.title %>（<%= video.posts.count %> 回視聴）</p>
+    <div class="tab-content">
+      <!-- 自分ランキング -->
+      <div class="tab-pane fade show active" id="my" role="tabpanel" aria-labelledby="my-tab">
+        <% if user_signed_in? && @my_rankings.present? %>
+          <% @my_rankings.each_with_index do |video, index| %>
+            <% my_count = video.posts.where(user: current_user).count %>
+            <p class="mb-2">
+              <strong><%= index + 1 %>.</strong> <%= video.title %>
+              <span class="text-primary">（あなたは <%= my_count %>回視聴）</span>
+            </p>
+          <% end %>
+        <% elsif user_signed_in? %>
+          <p class="text-muted text-center">まだ視聴履歴がありません…</p>
+        <% else %>
+          <p class="text-center">ログインすると自分のランキングが見れます！</p>
         <% end %>
-      <% else %>
-        <p>ログインしてください</p>
-      <% end %>
-    </div>
+      </div>
 
-    <!-- 全体ランキングタブ -->
-    <div class="tab-pane fade" id="all" role="tabpanel">
-      <% @all_rankings.each_with_index do |video, index| %>
-        <p><%= index + 1 %>. <%= video.title %>（<%= video.posts.count %> 回視聴）</p>
-      <% end %>
+      <!-- 全体ランキング -->
+      <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
+        <% @all_rankings.each_with_index do |video, index| %>
+          <p class="mb-2">
+            <strong><%= index + 1 %>.</strong> <%= video.title %>
+            <span class="text-success">（みんなで <%= video.posts.count %>回視聴）</span>
+          </p>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

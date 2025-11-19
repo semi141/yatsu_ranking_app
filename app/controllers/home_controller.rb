@@ -1,17 +1,22 @@
 class HomeController < ApplicationController
   def ranking
-    if user_signed_in?
-      @my_rankings = current_user.videos
-                        .select('videos.*, COUNT(posts.id) AS view_count')
-                        .joins(:posts)
+    # 全体ランキング（みんなの視聴回数合計）
+    @all_rankings = Video.select('videos.*, COUNT(posts.id) AS posts_count')
+                        .left_joins(:posts)
                         .group('videos.id')
-                        .order('view_count DESC')
-    end
+                        .order('posts_count DESC')
+                        .limit(50)  # 必要なら増やしてね
 
-    @all_rankings = Video
-                     .select('videos.*, COUNT(posts.id) AS total_views')
-                     .joins(:posts)
-                     .group('videos.id')
-                     .order('total_views DESC')
+    # 自分ランキング（ログイン時のみ）
+    if user_signed_in?
+      @my_rankings = Video.select('videos.*, COUNT(posts.id) AS my_posts_count')
+                          .left_joins(:posts)
+                          .where(posts: { user_id: current_user.id })
+                          .group('videos.id')
+                          .order('my_posts_count DESC')
+                          .limit(50)
+    else
+      @my_rankings = []
+    end
   end
 end
