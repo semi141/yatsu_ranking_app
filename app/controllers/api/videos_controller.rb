@@ -6,7 +6,7 @@ class Api::VideosController < ApplicationController
     youtube_id = params[:video_id].to_s.strip
     return head :bad_request if youtube_id.blank?
 
-    user = current_user || User.create!(email: 'test@example.com', password: 'password123')
+    user = current_user || User.find_by(email: 'test@example.com') || User.create!(email: 'test@example.com', password: 'password123')
 
     video = Video.find_or_create_by!(youtube_id: youtube_id) do |v|
       info = YoutubeService.get_video_info(youtube_id)
