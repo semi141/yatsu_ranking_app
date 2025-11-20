@@ -1,4 +1,3 @@
-# app/controllers/api/videos_controller.rb
 class Api::VideosController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:watched]
 
@@ -25,12 +24,14 @@ class Api::VideosController < ApplicationController
       v.watch_count
     end
 
-    # ← ここが全部 render の前に実行！
     watch = Watch.find_or_initialize_by(user: user, video: video)
-    watch.watched_count = (watch.watched_count || 0) + 1
+    if watch.new_record?
+      watch.watched_count = 1  # 新規作成なら1からスタート
+    else
+      watch.watched_count += 1 # 既存なら+1
+    end
     watch.save!
 
-    # ← ここでやっと返す！
     render json: {
       message:       "視聴記録を更新しました♪",
       youtube_id:    youtube_id,
