@@ -53,7 +53,6 @@
         <h3 class="card-title text-center mb-4 text-primary">自分ランキング</h3>
         <% if user_signed_in? && @my_rankings.present? %>
           <% @my_rankings.each_with_index do |video, index| %>
-            <% my_count = Watch.where(user: current_user, video: video).sum(:watched_count) %>
             <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded hover-bg-light">
               <div>
                 <strong class="text-primary fs-4"><%= index + 1 %></strong>
@@ -61,7 +60,9 @@
                   <%= video.title %>
                 <% end %>
               </div>
-              <span class="badge bg-primary fs-6">視聴回数<%= my_count %>回</span>
+              <span class="badge bg-primary fs-6">
+                視聴回数<%= Watch.where(user: current_user, video: video).take&.watched_count.to_i %>回
+              </span>
             </div>
           <% end %>
         <% else %>
