@@ -22,6 +22,7 @@ class Api::VideosController < ApplicationController
       v.title        = info[:title]
       v.thumbnail    = info[:thumbnail]
       v.published_at = info[:published_at]
+      v.watch_count
     end
 
     # ← ここが全部 render の前に実行！
