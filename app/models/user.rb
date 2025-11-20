@@ -12,6 +12,8 @@ class User < ApplicationRecord
   has_many :watches, dependent: :destroy
   has_many :watched_videos, through: :watches, source: :video
 
+  validates :email, uniqueness: { case_sensitive: false }
+
   # Google OAuthでログイン/登録してきたときの処理
   def self.from_omniauth(auth)
     user = where(provider: auth.provider, uid: auth.uid).first_or_initialize
