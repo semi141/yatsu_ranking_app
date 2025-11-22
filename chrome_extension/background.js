@@ -25,15 +25,17 @@ function sendToRails(videoId) {
       return;
     }
 
-    // chrome_extension/background.js の fetch の直前に追加
     console.log("【奴ランキング】送信開始 →", videoId);
     fetch("http://localhost:3000/api/videos/watched", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_TOKEN}`
+        "Content-Type": "application/json"
+        // "Authorization": ... ← こっち（ヘッダー）ではなく、下のbodyに入れます！
       },
-      body: JSON.stringify({ video_id: videoId }),
+      body: JSON.stringify({
+        video_id: videoId,
+        token: API_TOKEN  // ★ここに追加！！これでRailsがparams[:token]で受け取れます！
+      }),
       credentials: "omit"
     })
     .then(r => {
