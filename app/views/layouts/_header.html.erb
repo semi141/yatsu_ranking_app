@@ -1,0 +1,35 @@
+<header class="navbar navbar-expand navbar-dark bg-dark fixed-top shadow-sm">
+  <div class="container">
+    
+    <%= link_to root_path, class: 'navbar-brand fw-bold fs-4' do %>
+      奴ランキング見る奴
+    <% end %>
+
+    <div class="d-flex align-items-center ms-auto">
+      
+      <%= link_to root_path, class: 'btn btn-outline-light me-2' do %>
+        📺 動画一覧
+      <% end %>
+
+      <%= link_to search_path, class: 'btn btn-outline-light me-2' do %>
+        🔍 検索
+      <% end %>
+
+      <% if user_signed_in? %>
+        <%= link_to mypage_path, class: 'btn btn-warning' do %>
+          👤 マイページ
+        <% end %>
+        
+        <%= button_to destroy_user_session_path, method: :delete, class: 'btn btn-link text-light text-decoration-none ms-2' do %>
+          <small>ログアウト</small>
+        <% end %>
+
+      <% else %>
+        <%= link_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: 'btn btn-primary' do %>
+          Googleログイン
+        <% end %>
+      <% end %>
+
+    </div>
+  </div>
+</header>

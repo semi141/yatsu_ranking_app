@@ -27,3 +27,8 @@
 .edit-mode .delete-btn {
   display: inline;
 }
+
+/* ナビゲーションバーが固定されたときにコンテンツが隠れないように調整 */
+body {
+    padding-top: 70px; /* ナビゲーションバーの高さより少し多めに設定 */
+}
