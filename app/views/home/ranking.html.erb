@@ -1,22 +1,20 @@
 <div class="container mt-5">
-  <!-- 検索バー -->
-<%= form_with url: search_path, method: :get, local: true do |f| %>
-    <div>
-      <label>タイトルで検索：</label>
-      <%= f.text_field :keyword, placeholder: "動画タイトルを入力" %>
+  <%= form_with url: search_path, method: :get, local: true do |f| %>
+    <div class="mb-2">
+      <label class="form-label">タイトルで検索：</label>
+      <%= f.text_field :keyword, placeholder: "動画タイトルを入力", class: "form-control" %>
     </div>
 
-    <div>
-    <label>タグで絞り込み：</label>
-    <%= f.select :tag, options_for_select(Video.tag_counts_on(:tags).pluck(:name)), include_blank: "全て" %>
+    <div class="mb-2">
+      <label class="form-label">タグで絞り込み：</label>
+      <%= f.select :tag, options_for_select(Video.tag_counts_on(:tags).pluck(:name)), { include_blank: "全て" }, { class: "form-select" } %>
     </div>
 
-    <div>
-      <%= f.submit "検索" %>
+    <div class="mb-4">
+      <%= f.submit "検索", class: "btn btn-outline-primary" %>
     </div>
   <% end %>
 
-  <!-- タブ風ボタン -->
   <div class="text-center mb-5">
     <div class="btn-group" role="group">
       <%= link_to "自分ランキング", root_path, 
@@ -26,24 +24,51 @@
     </div>
   </div>
 
-  <!-- 表示切り替え -->
   <% if params[:tab] == "all" %>
     <div class="card shadow-sm">
       <div class="card-body">
         <h3 class="card-title text-center mb-4 text-success">全体ランキング</h3>
+        
         <% @all_rankings.each_with_index do |video, index| %>
-          <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded hover-bg-light">
-            <div>
-              <strong class="text-primary fs-4"><%= index + 1 %></strong>
-              <%= link_to video_path(video), class: "text-decoration-none text-dark fw-bold" do %>
-                <%= video.title %>
+          <% current_rank = (params[:page].to_i < 1 ? 0 : params[:page].to_i - 1) * 20 + index + 1 %>
+          
+          <div class="d-flex align-items-center mb-3 p-3 border rounded">
+            
+            <div class="me-3 text-center" style="min-width: 60px;">
+              <span class="fs-3 fw-bold text-success"><%= current_rank %>位</span>
+            </div>
+
+            <div class="me-4 flex-shrink-0">
+              <% if video.video_id.present? %>
+                <%= link_to video_path(video) do %>
+                  <img src="https://img.youtube.com/vi/<%= video.video_id %>/mqdefault.jpg" 
+                       alt="<%= video.title %>のサムネイル" 
+                       class="img-fluid rounded shadow-sm"
+                       style="width: 160px; height: auto;">
+                <% end %>
+              <% else %>
+                <div class="rounded bg-light text-secondary d-flex align-items-center justify-content-center border" 
+                     style="width: 160px; height: 90px; font-size: 0.9em;">
+                  NO IMAGE
+                </div>
               <% end %>
             </div>
-            <span class="badge bg-success fs-6">
-              視聴回数<%= Watch.where(video: video).sum(:watched_count) %>回
-            </span>
+
+            <div>
+              <h5 class="mb-2">
+                <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
+              </h5>
+              <span class="badge bg-success fs-6">
+                視聴回数 <%= Watch.where(video: video).sum(:watched_count) %>回
+              </span>
+            </div>
           </div>
         <% end %>
+        
+        <div class="d-flex justify-content-center mt-4">
+          <%= paginate @all_rankings %>
+        </div>
+        
       </div>
     </div>
 
@@ -52,19 +77,47 @@
       <div class="card-body">
         <h3 class="card-title text-center mb-4 text-primary">自分ランキング</h3>
         <% if user_signed_in? && @my_rankings.present? %>
+        
           <% @my_rankings.each_with_index do |video, index| %>
-            <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded hover-bg-light">
-              <div>
-                <strong class="text-primary fs-4"><%= index + 1 %></strong>
-                <%= link_to video_path(video), class: "text-decoration-none text-dark fw-bold" do %>
-                  <%= video.title %>
+            <% current_rank = (params[:page].to_i < 1 ? 0 : params[:page].to_i - 1) * 20 + index + 1 %>
+            
+            <div class="d-flex align-items-center mb-3 p-3 border rounded">
+              
+              <div class="me-3 text-center" style="min-width: 60px;">
+                <span class="fs-3 fw-bold text-primary"><%= current_rank %>位</span>
+              </div>
+              
+              <div class="me-4 flex-shrink-0">
+                <% if video.video_id.present? %>
+                  <%= link_to video_path(video) do %>
+                    <img src="https://img.youtube.com/vi/<%= video.video_id %>/mqdefault.jpg" 
+                         alt="<%= video.title %>のサムネイル" 
+                         class="img-fluid rounded shadow-sm"
+                         style="width: 160px; height: auto;">
+                  <% end %>
+                <% else %>
+                   <div class="rounded bg-light text-secondary d-flex align-items-center justify-content-center border" 
+                     style="width: 160px; height: 90px; font-size: 0.9em;">
+                  NO IMAGE
+                </div>
                 <% end %>
               </div>
-              <span class="badge bg-primary fs-6">
-                視聴回数<%= Watch.where(user: current_user, video: video).take&.watched_count.to_i %>回
-              </span>
+
+              <div>
+                <h5 class="mb-2">
+                  <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
+                </h5>
+                <span class="badge bg-primary fs-6">
+                  視聴回数 <%= Watch.where(user: current_user, video: video).take&.watched_count.to_i %>回
+                </span>
+              </div>
             </div>
           <% end %>
+
+          <div class="d-flex justify-content-center mt-4">
+            <%= paginate @my_rankings %>
+          </div>
+          
         <% else %>
           <p class="text-center text-muted mt-4">
             まだ視聴履歴がありません…<br>
