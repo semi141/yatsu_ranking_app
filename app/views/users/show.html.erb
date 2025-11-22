@@ -7,7 +7,7 @@
       <h3 class="mb-0">Chrome拡張機能用トークン</h3>
     </div>
     <div class="card-body">
-      <p>以下のトークンを拡張機能の設定画面にコピーしてね</p>
+      <p>以下のトークンを拡張機能の設定画面に**コピー**してね</p>
 
       <div class="alert alert-warning">
         <strong>⚠ 注意：</strong>このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！
@@ -25,7 +25,23 @@
     </div>
   </div>
 
-  <div class="mt-4">
-    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-secondary" %>
+  <div class="card mt-5 border-success">
+    <div class="card-header bg-success text-white">
+      <h3 class="mb-0">拡張機能の利用開始手順</h3>
+    </div>
+    <div class="card-body">
+      <p class="mb-3">「奴ランキング見る奴」拡張機能を有効にするには、以下の手順に従ってください。</p>
+      
+      <ol class="list-group list-group-numbered">
+        <li class="list-group-item">👆 上記の**「Chrome拡張機能用トークン」**をコピーします。</li>
+        <li class="list-group-item">お使いのChromeブラウザで**「奴ランキング見る奴」拡張機能のアイコン**をクリックします。</li>
+        <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを**貼り付け**て保存します。</li>
+        <li class="list-group-item">拡張機能が有効になり、**YouTubeで動画を視聴するたびに視聴回数が自動で記録**されます！</li>
+      </ol>
+      <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
+    </div>
+  </div>
+  <div class="mt-5 text-center">
+    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-secondary btn-lg" %>
   </div>
 </div>
