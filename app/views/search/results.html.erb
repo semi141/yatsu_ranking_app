@@ -3,6 +3,7 @@
     
     <div class="col-lg-12">
       
+      <!-- タイトル表示 -->
       <h2 class="mb-4">
         <% if params[:keyword].present? %>
           「<%= params[:keyword] %>」の検索結果
@@ -11,23 +12,28 @@
         <% else %>
           全動画リスト
         <% end %>
-        (<%= @videos.count %> 件)
+        (<%= @videos_count %> 件)
       </h2>
       
+      <!-- ソートフォーム -->
       <%= form_with url: search_index_path, method: :get, local: true, class: "mb-3" do %> 
         
+        <!-- 検索条件を引き継ぐための隠しフィールド -->
         <%= hidden_field_tag :keyword, params[:keyword] %>
         <%= hidden_field_tag :tag, params[:tag] %>
         
         <%= select_tag :sort,
             options_for_select([
-              ["視聴回数 多い順", "desc"],
-              ["視聴回数 少ない順", "asc"]
+              ["視聴回数 多い順", "watch_desc"],
+              ["視聴回数 少ない順", "watch_asc"],
+              ["登録順 新しい順", "created_desc"],
+              ["登録順 古い順", "created_asc"]
             ], params[:sort]),
             class: "form-select w-auto d-inline-block",
             onchange: "this.form.submit();" %>
       <% end %>
 
+      <!-- 動画リスト表示 -->
       <% if @videos.empty? %>
         <div class="alert alert-warning" role="alert">
           該当する動画は見つかりませんでした。
@@ -40,10 +46,12 @@
               
               <div class="d-flex align-items-center mb-3 p-3 border rounded">
                 
+                <!-- 1. 順位表示 -->
                 <div class="me-3 text-center" style="min-width: 60px;">
                   <span class="fs-3 fw-bold text-success"><%= index %>位</span>
                 </div>
 
+                <!-- 2. サムネイル (左側) -->
                 <div class="me-4 flex-shrink-0">
                   <% if video.video_id.present? %>
                     <%= link_to video_path(video) do %>
@@ -60,17 +68,20 @@
                   <% end %>
                 </div>
 
+                <!-- 3. タイトルと情報 (右側) -->
                 <div class="flex-grow-1">
                   <h5 class="mb-2">
                     <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
                   </h5>
                   
+                  <!-- タグリスト -->
                   <div class="mb-2">
                     <% video.tag_list.each do |tag| %>
                       <%= link_to tag, search_index_path(tag: tag), class: "badge bg-secondary text-decoration-none me-1" %>
                     <% end %>
                   </div>
 
+                  <!-- 視聴回数 -->
                   <span class="badge bg-success fs-6">
                     視聴回数 <%= Watch.where(video: video).sum(:watched_count) %>回
                   </span>
