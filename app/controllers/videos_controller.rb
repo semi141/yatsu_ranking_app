@@ -12,15 +12,14 @@ class VideosController < ApplicationController
     end
   end
 
-  def show
+def show
     @video = Video.find(params[:id])
 
     if @video.tag_list.present?
-      # 自分自身を含まず、同じタグを持つ他の動画を取得し、ランダムに5件選ぶ
-      @related_videos = Video.tagged_with(@video.tag_list, any: true)
-                             .where.not(id: @video.id)
-                             .order("RANDOM()") # 注: 環境がSQLite/PostgreSQLの場合。MySQLなら "RAND()" を使用
-                             .limit(5)
+      related_videos_with_duplicates = Video.tagged_with(@video.tag_list, any: true)
+                                            .where.not(id: @video.id)
+
+      @related_videos = related_videos_with_duplicates.to_a.uniq.sample(5)
     else
       @related_videos = []
     end
