@@ -20,21 +20,20 @@ Rails.application.routes.draw do
 
   resources :posts, only: [:edit, :update, :destroy]
 
+  resources :search, only: [:index]
+
   # API エンドポイント
   namespace :api do
     post 'videos/watched', to: 'videos#watched'
   end
 
-  # ヘッダーに配置したい導線
+  # ヘッダー
   
   # マイページ
   get '/mypage', to: 'users#show', as: :mypage 
   
   # トークン再生成アクション
   post '/users/regenerate_token', to: 'users#regenerate_token', as: :regenerate_token_users
-
-  # 検索ページ
-  get 'search', to: 'search#index', as: :search
 
   # ルートページの設定
   root "home#ranking" # ログイン状態にかかわらず、ここがトップページになる

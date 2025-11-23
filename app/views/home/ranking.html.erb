@@ -1,5 +1,5 @@
 <div class="container mt-5">
-  <%= form_with url: search_path, method: :get, local: true do |f| %>
+  <%= form_with url: search_index_path, method: :get, local: true do |f| %>
     <div class="mb-2">
       <label class="form-label">タイトルで検索：</label>
       <%= f.text_field :keyword, placeholder: "動画タイトルを入力", class: "form-control" %>
@@ -66,13 +66,20 @@
             </div>
 
             <div>
-              <h5 class="mb-2">
-                <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
-              </h5>
-              <span class="badge bg-success fs-6">
-                視聴回数 <%= Watch.where(video: video).sum(:watched_count) %>回
-              </span>
-            </div>
+                <h5 class="mb-2">
+                  <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
+                </h5>
+
+                <div class="mb-2">
+                  <% video.tag_list.each do |tag| %>
+                    <%= link_to tag, search_index_path(tag: tag), class: "badge bg-secondary text-decoration-none me-1" %>
+                  <% end %>
+                </div>
+                
+                <span class="badge bg-success fs-6">
+                  視聴回数 <%= Watch.where(video: video).sum(:watched_count) %>回
+                </span>
+              </div>
           </div>
         <% end %>
         
@@ -118,6 +125,14 @@
                 <h5 class="mb-2">
                   <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
                 </h5>
+
+                <div class="mb-2">
+                  <% video.tag_list.each do |tag| %>
+                    <%# クリックすると、そのタグで検索ページに遷移します %>
+                    <%= link_to tag, search_index_path(tag: tag), class: "badge bg-secondary text-decoration-none me-1" %>
+                  <% end %>
+                </div>
+                
                 <span class="badge bg-primary fs-6">
                   視聴回数 <%= Watch.where(user: current_user, video: video).take&.watched_count.to_i %>回
                 </span>
