@@ -32,3 +32,5 @@
 body {
     padding-top: 70px; /* ナビゲーションバーの高さより少し多めに設定 */
 }
+
+@import "bootstrap-icons/font/bootstrap-icons";

@@ -1,5 +1,12 @@
 <h1><%= @video.title %></h1>
 
+<p class="mb-4">
+  <span class="badge bg-primary fs-5">
+    視聴回数: <%= Watch.where(video: @video).sum(:watched_count) %>回
+  </span>
+  <%= link_to "YouTubeで見る", "https://www.youtube.com/watch?v=#{@video.video_id}", target: "_blank", class: "btn btn-danger btn-sm ms-3" %>
+</p>
+<hr>
 <h3>コメント一覧</h3>
 
 <% valid_posts = @video.posts.select { |post|
@@ -25,32 +32,111 @@
 
 <br><br>
 
+<hr>
 <h3>タグ</h3>
 
-<% if @video.tag_list.any? %>
-  <ul id="tag-list">
-    <% @video.tag_list.each do |tag| %>
-      <li class="tag-item" data-tag="<%= tag %>">
-        <span class="tag-name"><%= tag %></span>
-        <span class="delete-btn">&times;</span>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>タグはまだありません</p>
+<div id="tag-section">
+  <% if @video.tag_list.any? %>
+    <ul id="tag-list" class="list-unstyled d-flex flex-wrap align-items-center mb-3">
+      <% @video.tag_list.each do |tag| %>
+        <li class="me-4 mt-2 position-relative tag-list-item" data-tag="<%= tag %>">
+          
+          <%= link_to tag, root_path(keyword: tag), 
+              class: "badge bg-light text-dark border border-secondary text-decoration-none px-3 py-2 fs-6 fw-normal rounded-pill" %> 
+          
+          <%= link_to remove_tag_video_path(@video, tag: tag),
+                      method: :delete,
+                      remote: true,
+                      # start-100: 親の右端へ配置
+                      # translate-middle: 自身の中心を基準点に合わせる（これで角に半分乗る）
+                      class: "delete-tag-btn position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white border border-light d-none text-decoration-none",
+                      style: "width: 20px; height: 20px; cursor: pointer; z-index: 10; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);",
+                      data: { confirm: "タグ '#{tag}' を削除しますか？" } do %>
+            <span aria-hidden="true" style="font-size: 14px; line-height: 1; font-weight: bold;">&times;</span>
+          <% end %>
+
+        </li>
+      <% end %>
+    </ul>
+    
+    <button id="toggle-edit-mode-btn" class="btn btn-outline-secondary btn-sm mb-3">タグ編集モード</button>
+
+  <% else %>
+    <p id="no-tags-message" class="text-muted">タグはまだありません</p>
+  <% end %>
+</div>
+
+
+<%= form_with(model: @video, url: video_path(@video), method: :patch, local: true, class: "mt-3") do |f| %>
+  <div>
+    <label class="form-label">新しいタグ追加（カンマ区切りOK）</label><br>
+    <%= text_field_tag "video[new_tags]", nil, class: "form-control", placeholder: "例: ギャグ魔神, 面接, ヤバいディレクター" %>
+  </div>
+
+  <%= f.submit "タグを追加", class: "btn btn-success btn-sm mt-2" %>
 <% end %>
 
-<button id="edit-tags-btn">タグ編集モード</button>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggleBtn = document.getElementById('toggle-edit-mode-btn');
+    
+    if (toggleBtn) {
+      const deleteBtns = document.querySelectorAll('.delete-tag-btn');
+      
+      toggleBtn.addEventListener('click', function() {
+        const isEditModeActive = this.classList.contains('active');
 
-<br><br>
+        deleteBtns.forEach(btn => {
+          if (isEditModeActive) {
+            btn.classList.add('d-none'); // 消す
+            btn.classList.remove('d-flex'); // flexも消す
+          } else {
+            btn.classList.remove('d-none'); // 表示する
+            btn.classList.add('d-flex'); // flexで中央揃えを有効にする
+          }
+        });
 
-<%= form_with(model: @video, url: video_path(@video), method: :patch, local: true) do |f| %>
+        if (isEditModeActive) {
+          this.textContent = 'タグ編集モード';
+          this.classList.remove('active', 'btn-secondary');
+          this.classList.add('btn-outline-secondary');
+        } else {
+          this.textContent = '編集モードを終了';
+          this.classList.add('active', 'btn-secondary');
+          this.classList.remove('btn-outline-secondary');
+        }
+      });
+    }
+  });
+</script>
 
-  <div>
-    <label>新しいタグ追加（カンマ区切りOK）</label><br>
-    <%= text_field_tag "video[new_tags]" %>
-  </div><br>
+<hr class="my-5">
 
-  <%= f.submit "タグを追加", class: "btn" %>
-
+<h3>🎥 関連動画</h3>
+<% if @related_videos.any? %>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% @related_videos.each do |video| %>
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <% if video.video_id.present? %>
+            <%= link_to video_path(video) do %>
+              <img src="https://img.youtube.com/vi/<%= video.video_id %>/mqdefault.jpg" 
+                   class="card-img-top" 
+                   alt="<%= video.title %>のサムネイル">
+            <% end %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= link_to video.title, video_path(video), class: "text-decoration-none text-dark fw-bold" %>
+            </h5>
+            <p class="card-text small text-muted">
+              視聴回数: <%= Watch.where(video: video).sum(:watched_count) %>回
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-muted">関連するタグを持つ他の動画は見つかりませんでした。</p>
 <% end %>

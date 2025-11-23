@@ -11,7 +11,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      post :remove_tag
+      delete :remove_tag
+      get :remove_tag
     end
 
     resources :posts, only: [:new, :create]

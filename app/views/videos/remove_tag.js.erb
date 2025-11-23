@@ -1,0 +1,20 @@
+var tagElement = document.querySelector('li[data-tag="<%= params[:tag] %>"]');
+
+if (tagElement) {
+  // アニメーション付きで要素を削除
+  tagElement.style.transition = 'opacity 0.3s ease';
+  tagElement.style.opacity = '0'; 
+
+  setTimeout(function() {
+    tagElement.remove();
+
+    // タグが一つもなくなったら、「タグはまだありません」のメッセージを表示する
+    var tagList = document.getElementById('tag-list');
+    if (tagList && tagList.children.length === 0) {
+      var tagSection = document.getElementById('tag-section');
+      if (tagSection) {
+        tagSection.innerHTML = '<p id="no-tags-message" class="text-muted">タグはまだありません</p>';
+      }
+    }
+  }, 300); 
+}

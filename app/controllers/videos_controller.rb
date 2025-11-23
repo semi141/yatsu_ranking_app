@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: [:index]  # サイト開いたときのみ自動更新
+  before_action :authenticate_user!, only: [:index] # サイト開いたときのみ自動更新
 
   def index
     @videos = Video.all
@@ -14,6 +14,16 @@ class VideosController < ApplicationController
 
   def show
     @video = Video.find(params[:id])
+
+    if @video.tag_list.present?
+      # 自分自身を含まず、同じタグを持つ他の動画を取得し、ランダムに5件選ぶ
+      @related_videos = Video.tagged_with(@video.tag_list, any: true)
+                             .where.not(id: @video.id)
+                             .order("RANDOM()") # 注: 環境がSQLite/PostgreSQLの場合。MySQLなら "RAND()" を使用
+                             .limit(5)
+    else
+      @related_videos = []
+    end
   end
 
   def update
@@ -28,7 +38,7 @@ class VideosController < ApplicationController
       selected_tags += new_tags
     end
 
-    selected_tags.uniq!  # 重複あったら消す
+    selected_tags.uniq! # 重複あったら消す
 
     @video.tag_list = selected_tags
 
@@ -46,7 +56,11 @@ class VideosController < ApplicationController
     @video.tag_list.remove(tag)
     @video.save
 
-    head :ok
+    # UnknownFormat エラー対策として、HTML形式でリダイレクトする処理を追加
+    respond_to do |format|
+      format.js { render layout: false } 
+      format.html { redirect_to @video, notice: "タグを削除しました。" } 
+    end
   end
 
   private
