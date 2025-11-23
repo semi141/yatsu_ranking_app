@@ -24,6 +24,17 @@
     </div>
   </div>
 
+  <div class="text-center mb-5">
+    <div class="btn-group btn-group-sm" role="group">
+      <%= link_to "総合", root_path(tab: params[:tab], period: "all"), 
+          class: "btn #{@period == 'all' ? 'btn-dark' : 'btn-outline-dark'}" %>
+      <%= link_to "月間", root_path(tab: params[:tab], period: "monthly"), 
+          class: "btn #{@period == 'monthly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+      <%= link_to "週間", root_path(tab: params[:tab], period: "weekly"), 
+          class: "btn #{@period == 'weekly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+    </div>
+  </div>
+
   <% if params[:tab] == "all" %>
     <div class="card shadow-sm">
       <div class="card-body">
@@ -77,7 +88,7 @@
       <div class="card-body">
         <h3 class="card-title text-center mb-4 text-primary">自分ランキング</h3>
         <% if user_signed_in? && @my_rankings.present? %>
-        
+          
           <% @my_rankings.each_with_index do |video, index| %>
             <% current_rank = (params[:page].to_i < 1 ? 0 : params[:page].to_i - 1) * 20 + index + 1 %>
             
@@ -117,13 +128,35 @@
           <div class="d-flex justify-content-center mt-4">
             <%= paginate @my_rankings %>
           </div>
-          
-        <% else %>
-          <p class="text-center text-muted mt-4">
-            まだ視聴履歴がありません…<br>
-            ジャルジャル見てランキング入りさせよう！
+
+        <% elsif user_signed_in? && current_user.api_token.blank? %>
+          <p class="text-center text-danger mt-4 fs-5 fw-bold">
+            ⚠️ 要確認: あなたの視聴履歴を表示できません
           </p>
+          <p class="text-center text-muted mt-2">
+            Chrome拡張機能と連携するため、マイページでAPIトークンを登録してください。
+          </p>
+          <div class="text-center mt-3">
+             <%= link_to "マイページへ移動", edit_user_registration_path, class: "btn btn-warning btn-lg" %>
+          </div>
+          
+        <% elsif user_signed_in? && @my_rankings.empty? %>
+          <p class="text-center text-muted mt-4">
+            まだジャルジャルタワーの動画を一度も視聴していません。<br>
+            ジャルジャルを見て、あなただけのランキングを完成させましょう！
+          </p>
+
+        <% else %>
+        <p class="text-center text-muted mt-4 fs-5">
+            ログインすると、あなただけの視聴ランキングが表示されます。<br>
+          </p>
+          <div class="text-center mt-3">
+            <%= link_to user_google_oauth2_omniauth_authorize_path, class: "btn btn-primary btn-lg" do %>
+              <i class="fab fa-google me-2"></i> Googleアカウントでログイン
+            <% end %>
+          </div>
         <% end %>
+
       </div>
     </div>
   <% end %>
