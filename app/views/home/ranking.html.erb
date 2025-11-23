@@ -17,9 +17,9 @@
 
   <div class="text-center mb-5">
     <div class="btn-group" role="group">
-      <%= link_to "自分ランキング", root_path, 
+      <%= link_to "自分ランキング", root_path(period: @period), 
           class: "btn #{params[:tab] == 'all' ? 'btn-outline-primary' : 'btn-primary'} px-4" %>
-      <%= link_to "全体ランキング", root_path(tab: "all"), 
+      <%= link_to "全体ランキング", root_path(tab: "all", period: @period), 
           class: "btn #{params[:tab] == 'all' ? 'btn-primary' : 'btn-outline-primary'} px-4" %>
     </div>
   </div>
@@ -129,26 +129,51 @@
             <%= paginate @my_rankings %>
           </div>
 
-        <% elsif user_signed_in? && current_user.api_token.blank? %>
-          <p class="text-center text-danger mt-4 fs-5 fw-bold">
-            ⚠️ 要確認: あなたの視聴履歴を表示できません
-          </p>
-          <p class="text-center text-muted mt-2">
-            Chrome拡張機能と連携するため、マイページでAPIトークンを登録してください。
-          </p>
-          <div class="text-center mt-3">
-             <%= link_to "マイページへ移動", edit_user_registration_path, class: "btn btn-warning btn-lg" %>
-          </div>
-          
         <% elsif user_signed_in? && @my_rankings.empty? %>
-          <p class="text-center text-muted mt-4">
-            まだジャルジャルタワーの動画を一度も視聴していません。<br>
-            ジャルジャルを見て、あなただけのランキングを完成させましょう！
-          </p>
+
+          <% if current_user.api_token.present? %>
+            <p class="text-center text-danger mt-4 fs-5 fw-bold">
+              ⚠️ 要確認: 視聴履歴が表示されていません
+            </p>
+            
+            <p class="text-center text-muted mt-2" style="max-width: 450px; margin: 0 auto; line-height: 1.6;">
+              <span class="fw-bold">【トークン有効性チェック】</span><br>
+              お手数ですが、以下の2点をご確認ください。<br>
+              
+              <span style="display: block; margin-top: 10px;"></span>
+              
+              <span style="white-space: nowrap;">
+              1. マイページにて、<strong>拡張機能のトークンとマイページのAPIトークンが一致しているか</strong>。
+              </span><br>
+              <span style="white-space: nowrap;">
+              2. トークン確認後、<strong>再度ジャルジャルタワーの動画を視聴し、履歴が反映されるか</strong>。
+              </span>
+            </p>
+            
+            <div class="text-center mt-3">
+               <%= link_to "マイページへ移動", edit_user_registration_path, class: "btn btn-warning btn-lg" %>
+            </div>
+          
+          <% else %>
+            <p class="text-center mt-4 fs-5 fw-bold text-primary">
+              🎉 あと一歩であなた専用のランキングが見られます！
+            </p>
+            
+            <div class="text-center mt-3 p-3 bg-light rounded border">
+              <p class="mb-2">
+                このランキングを表示するには、Chrome拡張機能と<strong>マイページ</strong>を連携させる必要があります。
+              </p>
+              <p class="mb-3 fw-bold text-muted">
+                下のボタンからマイページへ進み、<strong>APIトークン</strong>をコピー＆ペーストして設定を完了してください。
+              </p>
+              
+              <%= link_to "マイページへGO！(設定画面へ)", edit_user_registration_path, class: "btn btn-primary btn-lg" %>
+            </div>
+          <% end %>
 
         <% else %>
         <p class="text-center text-muted mt-4 fs-5">
-            ログインすると、あなただけの視聴ランキングが表示されます。<br>
+            <strong>ログインすると、あなただけの視聴ランキングが表示されます。</strong><br>
           </p>
           <div class="text-center mt-3">
             <%= link_to user_google_oauth2_omniauth_authorize_path, class: "btn btn-primary btn-lg" do %>

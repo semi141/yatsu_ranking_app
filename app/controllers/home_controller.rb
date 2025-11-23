@@ -1,8 +1,6 @@
-# app/controllers/home_controller.rb
-
 class HomeController < ApplicationController
   def ranking
-    # ★ 期間設定を受け取る
+    # 期間設定を受け取る
     @tab = params[:tab] || "my"
     @period = params[:period] || "all" # 'all', 'weekly', 'monthly'
     
@@ -26,19 +24,27 @@ class HomeController < ApplicationController
     # --- 自分ランキング ---
     
     if user_signed_in?
-      # 自分ランキングは、上記の期間スコープに加えて user_id も絞り込む
-      my_watch_summary = scoped_watches
-                           .where(user: current_user)
-                           .select('video_id, SUM(watched_count) as user_watches_count')
-                           .group(:video_id)
+
+      if current_user.api_token.blank?
+        # トークンがない場合、ランキングは取得せず空配列にする
+        @my_rankings = []
+      else
+        # トークンがある場合のみ、ランキングを取得する
+        my_scoped_watches = scoped_watches.where(user: current_user)
+        
+        my_watch_summary = my_scoped_watches
+                             .select('video_id, SUM(watched_count) as user_watches_count')
+                             .group(:video_id)
+        
+        @my_rankings = Video.joins(
+          "INNER JOIN (#{my_watch_summary.to_sql}) AS user_filtered_watches 
+           ON videos.id = user_filtered_watches.video_id"
+        )
+        .order('user_filtered_watches.user_watches_count DESC')
+        .page(params[:page]) 
+        .per(20)
+      end
       
-      @my_rankings = Video.joins(
-        "INNER JOIN (#{my_watch_summary.to_sql}) AS user_filtered_watches 
-         ON videos.id = user_filtered_watches.video_id"
-      )
-      .order('user_filtered_watches.user_watches_count DESC')
-      .page(params[:page]) 
-      .per(20)
     else
       @my_rankings = []
     end
