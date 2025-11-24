@@ -81,29 +81,49 @@
   }
 </script>
 
-<h3>コメント一覧</h3>
+<div class="mt-5 pt-3 border-top">
+  <h3 class="mb-4 fw-bold">コメント投稿</h3>
 
-<% valid_posts = @video.posts.select { |post|
-    post.content.present? && post.content != "YouTubeで視聴！自動登録"
-  } %>
+  <% if user_signed_in? %>
+    <%# コメント投稿フォーム (非同期 UJS/Turbo 対応) %>
+    <%# form_with の url はネストされたルーティングに対応し、data: { remote: true } で非同期有効化 %>
+    <%= form_with(model: [@video, @post], url: video_posts_path(@video), data: { remote: true, turbo: true }, class: "mb-5", id: "new_post_form") do |f| %>
+      
+      <%# エラー表示エリア %>
+      <div id="post_errors">
+        <%# エラーメッセージパーシャルがある場合はここでレンダリングします %>
+        <%# <%= render 'shared/error_messages', resource: @post %>
+      </div>
 
-<% if valid_posts.any? %>
-  <% valid_posts.each do |post| %>
-    <div class="border-bottom pb-2 mb-2">
-      <p class="mb-1"><%= post.content %></p>
-
-      <% if current_user == post.user %>
-        <%= link_to "編集", edit_post_path(post), class: "btn btn-sm btn-outline-secondary me-2" %>
-        <%# ★注意★ 次のステップで data: { confirm: "..." } をカスタムモーダルに置き換えます %>
-        <%= button_to "削除", post_path(post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-outline-danger" %>
-      <% end %>
+      <div class="mb-3">
+        <%= f.text_area :content, 
+              rows: 3, 
+              class: "form-control", 
+              placeholder: "コメントを入力してください (140文字まで)",
+              maxlength: 140 %>
+      </div>
+      <%= f.submit "投稿する", class: "btn btn-primary" %>
+    <% end %>
+  <% else %>
+    <div class="alert alert-info text-center" role="alert">
+      コメントを投稿するには<%= link_to 'ログイン', new_user_session_path, class: 'alert-link' %>が必要です。
     </div>
   <% end %>
-<% else %>
-  <p>まだコメントはありません</p>
-<% end %>
 
-<%= link_to "コメントを投稿する", new_video_post_path(@video), class: "btn btn-primary mt-3" %>
+  <%# コメント一覧セクション %>
+  <%# 「YouTubeで視聴！自動登録」を除いたコメント件数を表示 %>
+  <h3 class="mb-4 fw-bold mt-5">コメント一覧（<%= @posts.reject { |post| post.content == "YouTubeで視聴！自動登録" }.count %>件）</h3>
+  
+  <div id="post_list">
+    <% if @posts.present? %>
+      <%# _post.html.erb パーシャルでコメントをレンダリングします %>
+      <%= render partial: 'posts/post', collection: @posts %>
+    <% else %>
+      <p class="text-muted text-center">まだコメントはありません。</p>
+    <% end %>
+  </div>
+
+</div>
 
 <br><br>
 

@@ -15,6 +15,15 @@ class VideosController < ApplicationController
   def show
     @video = Video.find(params[:id])
 
+    # Watchデータの初期化（ログインしている場合のみ）
+    @watch = Watch.find_or_initialize_by(user: current_user, video: @video) if user_signed_in? 
+
+    @post = @video.posts.build
+    
+    # コメント一覧の取得（新しい投稿順に表示）
+    @posts = @video.posts.includes(:user).order(created_at: :desc)
+    
+    # 関連動画の取得（既存のロジック）
     if @video.tag_list.present?
       # 重複を除き、自身を除く関連動画をランダムに5件取得
       related_videos_with_duplicates = Video.tagged_with(@video.tag_list, any: true)
@@ -26,7 +35,6 @@ class VideosController < ApplicationController
     end
   end
 
-  # ★追加アクション2: YouTubeプレイヤーからの再生イベントを処理し、視聴回数を更新します
   def watched
     @video = Video.find(params[:id])
     

@@ -1,0 +1,10 @@
+$("#post-<%= @post.id %>").fadeOut(500, function(){
+  $(this).remove();
+});
+
+# 削除成功メッセージを画面上部に表示
+$("#flash_messages").html('<div class="alert alert-danger alert-dismissible fade show" role="alert">コメントを削除しました。<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
+# フラッシュメッセージを数秒後に消す
+setTimeout(function(){ 
+  $("#flash_messages").find(".alert").fadeOut("slow");
+}, 3000);

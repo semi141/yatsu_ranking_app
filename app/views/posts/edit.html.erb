@@ -1,12 +1,37 @@
-<h2>投稿編集</h2>
+<%# app/views/posts/edit.html.erb %>
 
-<%= form_with(model: @post, local: true) do |f| %>
-  <div>
-    <%= f.label :content, "投稿内容" %><br>
-    <%= f.text_area :content %>
-  </div>
+<%# Turbo Frameで囲むことで、編集ボタンが押されたときにこの部分だけが差し替わります %>
+<turbo-frame id="post-<%= @post.id %>">
+  <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
+    <h5 class="mb-3 text-sm font-semibold">コメント編集</h5>
 
-  <div>
-    <%= f.submit "更新する" %>
+    <%= form_with(model: [@video, @post], url: video_post_path(@video, @post), method: :patch) do |f| %>
+      
+      <%# エラーメッセージの表示 %>
+      <% if @post.errors.any? %>
+        <div id="error_explanation" class="alert alert-danger">
+          <h6 class="font-bold"><%= @post.errors.count %>件のエラーがあります。</h6>
+          <ul>
+            <% @post.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="mb-3">
+        <%= f.text_area :content, 
+                        class: "form-control w-full p-2 border rounded resize-y", 
+                        rows: 3,
+                        maxlength: 140 %>
+      </div>
+
+      <div class="flex justify-end space-x-2">
+        <%= f.submit "更新する", class: "btn btn-primary" %>
+        <%# ★修正点: キャンセルボタンのリンク先を@postに変更し、method: :getを指定。★ %>
+        <%# これにより、元のコメント表示パーシャル（_post.html.erb）に非同期で戻る %>
+        <%= link_to "キャンセル", video_post_path(@video, @post), method: :get, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</turbo-frame>

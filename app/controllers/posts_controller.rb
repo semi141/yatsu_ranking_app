@@ -1,10 +1,6 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:edit, :update, :destroy]
-
-  def new
-    @video = Video.find(params[:video_id])
-    @post = @video.posts.build
-  end
+  # ログイン必須のメソッドを指定
+  before_action :authenticate_user!, only: [:create, :edit, :update, :destroy]
 
   def create
     @video = Video.find(params[:video_id])
@@ -12,43 +8,81 @@ class PostsController < ApplicationController
     @post.user = current_user
 
     if @post.save
-      redirect_to @video, notice: "投稿を作成しました！"
+      respond_to do |format|
+        format.html { redirect_to @video, notice: "コメントを投稿しました。" }
+        format.js { flash.now[:notice] = "コメントを投稿しました！" }
+      end
     else
-      Rails.logger.debug(@post.errors.full_messages)
-      render :new
+      respond_to do |format|
+        format.html do
+          flash.now[:alert] = "コメントの投稿に失敗しました。"
+          @posts = @video.posts.includes(:user).order(created_at: :desc)
+          render 'videos/show'
+        end
+        format.js { render :fail, status: :unprocessable_entity }
+      end
     end
   end
 
   def edit
-    @post = Post.find(params[:id])
-    @video = @post.video
-  end
+      @video = Video.find(params[:video_id])
+      @post = @video.posts.find(params[:id])
+      
+      unless current_user == @post.user
+        return redirect_to @video, alert: "他のユーザーのコメントは編集できません。"
+      end
 
-  def update
-    @post = Post.find(params[:id])
-    @video = @post.video
-
-    if @post.update(post_params)
-      redirect_to @video, notice: "投稿を更新しました！"
-    else
-      render :edit
+      respond_to do |format|
+        format.html # 通常のリクエストの場合、edit.html.erbをレンダリング
+        format.js   # Turbo Frameリクエストの場合、edit.js.erbをレンダリング
+      end
     end
-  end
+
+    def update
+      @video = Video.find(params[:video_id])
+      @post = @video.posts.find(params[:id])
+      
+      if current_user != @post.user
+        return redirect_to @video, alert: "他のユーザーのコメントは更新できません。"
+      end
+      
+      if @post.update(post_params)
+        respond_to do |format|
+          # 成功時、非同期の場合はupdate.js.erbを実行
+          format.html { redirect_to @video, notice: "コメントを編集しました。" }
+          format.js { flash.now[:notice] = "コメントを編集しました！" }
+        end
+      else
+        # 失敗時、非同期の場合はeditビューをレンダリングし、エラーを表示
+        respond_to do |format|
+          format.html { render :edit, status: :unprocessable_entity }
+          format.js { render :edit, status: :unprocessable_entity } # edit.js.erbを再レンダリング
+        end
+      end
+    end
 
   def destroy
-    @post = Post.find(params[:id])
-    @video = @post.video
+    @video = Video.find(params[:video_id])
+    @post = @video.posts.find(params[:id])
+    
+    # 権限チェック
+    if current_user != @post.user
+      return redirect_to @video, alert: "他のユーザーのコメントは削除できません。"
+    end
+    
+    # コメントを削除
     @post.destroy
-    redirect_to @video, notice: "投稿を削除しました！"
+    
+    # 非同期削除のためのJSレスポンスを返す
+    respond_to do |format|
+      format.html { redirect_to @video, notice: "コメントを削除しました。" }
+      format.js # app/views/posts/destroy.js.erb を実行
+    end
   end
 
   private
 
-  def set_post
-    @post = Post.find(params[:id])
-  end
-
   def post_params
-    params.require(:post).permit(:content, :video_id)
+    params.require(:post).permit(:content)
   end
 end

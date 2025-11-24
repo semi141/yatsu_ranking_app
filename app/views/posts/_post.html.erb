@@ -1,0 +1,35 @@
+<% post = post %>
+
+<% unless post.content == "YouTubeで視聴！自動登録" %>
+
+  <turbo-frame id="post-<%= post.id %>">
+    
+    <div class="py-2">
+      
+      <small class="text-muted d-block mb-1"><%= l post.created_at, format: :short %></small>
+      
+      <!-- コメント本文 -->
+      <p class="card-text mb-1">
+        <%= simple_format(h(post.content)) %>
+      </p>
+
+      <!-- 編集・削除リンク (投稿者本人のみ表示) -->
+      <% if user_signed_in? && current_user == post.user %>
+        <div class="text-end mt-2">
+          
+          <%= link_to '編集', edit_video_post_path(post.video, post), 
+                      class: 'btn btn-sm btn-outline-secondary me-2' %>
+          
+          <%# 削除ボタン（form_withで確実にDELETEを送信） %>
+          <%= form_with(model: [post.video, post], url: video_post_path(post.video, post), method: :delete, data: { turbo_confirm: '本当に削除しますか？' }, class: "d-inline") do |f| %>
+            <%= f.submit '削除', class: 'btn btn-sm btn-outline-danger' %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <hr>
+    </div>
+  
+  </turbo-frame>
+
+<% end %>

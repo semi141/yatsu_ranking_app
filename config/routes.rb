@@ -16,10 +16,8 @@ Rails.application.routes.draw do
       post :watched 
     end
 
-    resources :posts, only: [:new, :create]
+    resources :posts, only: [:create, :edit, :update, :destroy]
   end
-
-  resources :posts, only: [:edit, :update, :destroy]
 
   resources :search, only: [:index]
 
