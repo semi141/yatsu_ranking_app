@@ -39,8 +39,6 @@ gem 'rack-cors'
 
 gem 'acts-as-taggable-on'
 
-gem 'kaminari'
-
 gem 'bootstrap_icons_rails'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]

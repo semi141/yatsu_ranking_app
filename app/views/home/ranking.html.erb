@@ -84,7 +84,9 @@
         <% end %>
         
         <div class="d-flex justify-content-center mt-4">
-          <%= paginate @all_rankings %>
+          <%= render 'home/manual_pagination',
+              total_pages: @all_total_pages,
+              current_page: @current_page %>
         </div>
         
       </div>
@@ -141,7 +143,9 @@
           <% end %>
 
           <div class="d-flex justify-content-center mt-4">
-            <%= paginate @my_rankings %>
+            <%= render 'home/manual_pagination', 
+                total_pages: @my_total_pages,
+                current_page: @current_page %>
           </div>
 
         <% elsif user_signed_in? && @my_rankings.empty? %>
