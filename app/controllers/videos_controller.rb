@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :show, :watched]
+  before_action :authenticate_user!, only: [:watched, :update, :remove_tag]
 
   def index
     # 初期クエリ設定
