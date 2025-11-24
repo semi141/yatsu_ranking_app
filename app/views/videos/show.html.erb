@@ -106,7 +106,7 @@
     <% end %>
   <% else %>
     <div class="alert alert-info text-center" role="alert">
-      コメントを投稿するには<%= link_to 'ログイン', new_user_session_path, class: 'alert-link' %>が必要です。
+      コメントを投稿するには<%= link_to 'Googleログイン', user_google_oauth2_omniauth_authorize_path, class: 'alert-link' %>が必要です。
     </div>
   <% end %>
 
