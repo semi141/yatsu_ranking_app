@@ -1,26 +1,101 @@
 <h1><%= @video.title %></h1>
 
+<% if @video.video_id.present? %>
+  <div class="ratio ratio-16x9 mb-4 shadow-lg rounded">
+    <%# ここがiframeからdivに変わりました！YouTube IFrame Player APIがこの要素をプレイヤーに変換します %>
+    <div id="youtube-player"></div>
+  </div>
+<% else %>
+  <div class="alert alert-danger" role="alert">
+    動画IDが登録されていません。動画プレイヤーを表示できません。
+  </div>
+<% end %>
+
 <p class="mb-4">
+  <%# 視聴回数は、Watchテーブルの合計を表示（カウントロジックはJS経由で実行されます） %>
   <span class="badge bg-primary fs-5">
     視聴回数: <%= Watch.where(video: @video).sum(:watched_count) %>回
   </span>
   <%= link_to "YouTubeで見る", "https://www.youtube.com/watch?v=#{@video.video_id}", target: "_blank", class: "btn btn-danger btn-sm ms-3" %>
 </p>
 <hr>
+
+<script>
+  var tag = document.createElement('script');
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+  var player;
+  var hasCounted = false; 
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-player', {
+      videoId: '<%= @video.video_id %>',
+      playerVars: {
+        'autoplay': 0,
+        'controls': 1,
+        'showinfo': 0,
+        'rel': 0,
+        'enablejsapi': 1 
+      },
+      events: {
+        'onStateChange': onPlayerStateChange 
+      }
+    });
+  }
+
+  function onPlayerStateChange(event) {
+    if (event.data === YT.PlayerState.PLAYING && !hasCounted) {
+      
+      // 視聴回数更新のための非同期リクエスト関数を実行
+      updateWatchCount();
+      hasCounted = true;
+    }
+  }
+
+  // 4. 視聴回数更新のための非同期リクエスト関数
+  function updateWatchCount() {
+    const videoId = '<%= @video.id %>';
+    // RailsのCSRFトークンを取得
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    // /videos/:id/watched (POST) に非同期でリクエスト
+    fetch(`/videos/${videoId}/watched`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken // Railsでの認証対応
+      }
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('視聴回数を正常にカウントしました。');
+      } else {
+        console.error('視聴回数のカウントに失敗しました。', response.statusText);
+      }
+    })
+    .catch(error => {
+      console.error('ネットワークエラーにより視聴回数のカウントに失敗しました:', error);
+    });
+  }
+</script>
+
 <h3>コメント一覧</h3>
 
 <% valid_posts = @video.posts.select { |post|
-     post.content.present? && post.content != "YouTubeで視聴！自動登録"
-   } %>
+    post.content.present? && post.content != "YouTubeで視聴！自動登録"
+  } %>
 
 <% if valid_posts.any? %>
   <% valid_posts.each do |post| %>
-    <div>
-      <p><%= post.content %></p>
+    <div class="border-bottom pb-2 mb-2">
+      <p class="mb-1"><%= post.content %></p>
 
       <% if current_user == post.user %>
-        <%= link_to "編集", edit_post_path(post) %> |
-        <%= button_to "削除", post_path(post), method: :delete, data: { confirm: "本当に削除しますか？" } %>
+        <%= link_to "編集", edit_post_path(post), class: "btn btn-sm btn-outline-secondary me-2" %>
+        <%# ★注意★ 次のステップで data: { confirm: "..." } をカスタムモーダルに置き換えます %>
+        <%= button_to "削除", post_path(post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-sm btn-outline-danger" %>
       <% end %>
     </div>
   <% end %>
@@ -28,7 +103,7 @@
   <p>まだコメントはありません</p>
 <% end %>
 
-<%= link_to "コメントを投稿する", new_video_post_path(@video) %>
+<%= link_to "コメントを投稿する", new_video_post_path(@video), class: "btn btn-primary mt-3" %>
 
 <br><br>
 
@@ -47,8 +122,6 @@
           <%= link_to remove_tag_video_path(@video, tag: tag),
                       method: :delete,
                       remote: true,
-                      # start-100: 親の右端へ配置
-                      # translate-middle: 自身の中心を基準点に合わせる（これで角に半分乗る）
                       class: "delete-tag-btn position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white border border-light d-none text-decoration-none",
                       style: "width: 20px; height: 20px; cursor: pointer; z-index: 10; padding: 0; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2);",
                       data: { confirm: "タグ '#{tag}' を削除しますか？" } do %>
@@ -121,8 +194,8 @@
           <% if video.video_id.present? %>
             <%= link_to video_path(video) do %>
               <img src="https://img.youtube.com/vi/<%= video.video_id %>/mqdefault.jpg" 
-                   class="card-img-top" 
-                   alt="<%= video.title %>のサムネイル">
+                    class="card-img-top" 
+                    alt="<%= video.title %>のサムネイル">
             <% end %>
           <% end %>
           <div class="card-body">

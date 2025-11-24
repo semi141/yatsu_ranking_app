@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: [:index] # サイト開いたときのみ自動更新
+  before_action :authenticate_user!, only: [:index, :show, :watched] # ★watchedアクションを追加！
 
   def index
     @videos = Video.all
@@ -12,17 +12,41 @@ class VideosController < ApplicationController
     end
   end
 
-def show
+  def show
     @video = Video.find(params[:id])
 
     if @video.tag_list.present?
+      # 重複を除き、自身を除く関連動画をランダムに5件取得
       related_videos_with_duplicates = Video.tagged_with(@video.tag_list, any: true)
-                                            .where.not(id: @video.id)
+                                           .where.not(id: @video.id)
 
       @related_videos = related_videos_with_duplicates.to_a.uniq.sample(5)
     else
       @related_videos = []
     end
+  end
+
+  # ★追加アクション2: YouTubeプレイヤーからの再生イベントを処理し、視聴回数を更新します
+  def watched
+    @video = Video.find(params[:id])
+    
+    if current_user
+      # 現在のユーザーと動画の組み合わせでWatchレコードを探すか、新しく作る
+      watch = Watch.find_or_initialize_by(user: current_user, video: @video)
+      
+      # 視聴回数を1増やすロジック（showアクションから移動）
+      if watch.new_record?
+        watch.watched_count = 1
+      else
+        watch.watched_count += 1
+      end
+      
+      # 保存する
+      watch.save
+    end
+    
+    # JavaScriptからの非同期リクエストなので、コンテンツを返さず成功ステータス(200 OK)だけを返します
+    head :ok 
   end
 
   def update
