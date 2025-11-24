@@ -1,15 +1,36 @@
 class VideosController < ApplicationController
-  before_action :authenticate_user!, only: [:index, :show, :watched] # ★watchedアクションを追加！
+  before_action :authenticate_user!, only: [:index, :show, :watched]
 
   def index
+    # 初期クエリ設定
     @videos = Video.all
+    @title = "動画ランキング"
+    @search_term = ""
+
+    if params[:tag].present?
+      # タグ検索の場合
+      @videos = @videos.tagged_with(params[:tag])
+      @title = "タグ: #{params[:tag]}"
+      @search_term = params[:tag]
+    elsif params[:q].present?
+      # フリーワード検索の場合
+      @videos = @videos.where("title LIKE ?", "%#{params[:q]}%")
+      @title = "検索結果: #{params[:q]}"
+      @search_term = params[:q]
+    end
 
     case params[:sort]
     when "desc"
       @videos = @videos.order(watch_count: :desc)
     when "asc"
       @videos = @videos.order(watch_count: :asc)
+    else
+      # デフォルトはID（新しい順）でソート
+      @videos = @videos.order(id: :desc)
     end
+
+    # ページネーション（per(20)は適当な値に調整してください）
+    @videos = @videos.page(params[:page]).per(20)
   end
 
   def show

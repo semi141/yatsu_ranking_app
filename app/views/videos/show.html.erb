@@ -136,7 +136,8 @@
       <% @video.tag_list.each do |tag| %>
         <li class="me-4 mt-2 position-relative tag-list-item" data-tag="<%= tag %>">
           
-          <%= link_to tag, root_path(keyword: tag), 
+          <%# ランキングページと同じ search_index_path を使用する★ %>
+          <%= link_to tag, search_index_path(tag: tag), 
               class: "badge bg-light text-dark border border-secondary text-decoration-none px-3 py-2 fs-6 fw-normal rounded-pill" %> 
           
           <%= link_to remove_tag_video_path(@video, tag: tag),
