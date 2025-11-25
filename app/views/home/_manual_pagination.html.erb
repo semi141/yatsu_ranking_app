@@ -1,70 +1,62 @@
-<%#
-  手動ページネーションパーシャル
-  
-  ローカル変数:
-  - total_pages: 総ページ数（@all_total_pages, @my_total_pagesなど）
-  - current_page: 現在のページ番号（@current_page）
-%>
+<% if total_pages > 1 -%>
+<div class="d-flex justify-content-center mt-4">
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      
+      <%# 1. 前のページリンク %>
+      <li class="page-item <%= 'disabled' if current_page == 1 %>">
+        <%= link_to "前のページ", 
+                    root_path(tab: params[:tab], period: params[:period], channel: params[:channel], page: current_page - 1), 
+                    class: "page-link" %>
+      </li>
 
-<% if total_pages > 1 %>
-  <div class="d-flex justify-content-center mt-4">
-    <nav aria-label="Page navigation">
-      <ul class="pagination">
-        
-        <%# 1. 前のページリンク %>
-        <li class="page-item <%= 'disabled' if current_page == 1 %>">
-          <%= link_to "前のページ", 
-                      root_path(tab: params[:tab], period: params[:period], page: current_page - 1), 
-                      class: "page-link" %>
+      <%# 2. ページ番号リンク %>
+      <%# ページネーションのウィンドウサイズを設定 -%>
+      <% window_size = 2 %>
+      
+      <%# ページ番号の範囲を計算 -%>
+      <% start_page = [current_page - window_size, 1].max %>
+      <% end_page = [current_page + window_size, total_pages].min %>
+
+      <%# 最初のページ（1）がウィンドウに含まれていない場合、1と...を表示 -%>
+      <% if start_page > 1 -%>
+        <li class="page-item <%= 'active' if 1 == current_page %>">
+          <%= link_to 1, root_path(tab: params[:tab], period: params[:period], channel: params[:channel], page: 1), class: "page-link" %>
         </li>
+        <% if start_page > 2 -%>
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        <% end -%>
+      <% end -%>
 
-        <%# 2. ページ番号リンク %>
-        <%# ページネーションのウィンドウサイズを設定 %>
-        <% window_size = 2 %>
+      <%# ウィンドウ内のページ番号を表示 -%>
+      <% (start_page..end_page).each do |page| -%>
+        <%# 最初のページと最後のページは外側で制御するため、ウィンドウ内ではスキップ -%>
+        <% next if page == 1 && start_page > 1 && total_pages > (window_size * 2 + 1) -%>
+        <% next if page == total_pages && end_page < total_pages && total_pages > (window_size * 2 + 1) -%>
         
-        <%# ページ番号の範囲を計算 %>
-        <% start_page = [current_page - window_size, 1].max %>
-        <% end_page = [current_page + window_size, total_pages].min %>
-
-        <%# 最初のページ（1）がウィンドウに含まれていない場合、1と...を表示 %>
-        <% if start_page > 1 %>
-          <li class="page-item <%= 'active' if 1 == current_page %>">
-            <%= link_to 1, root_path(tab: params[:tab], period: params[:period], page: 1), class: "page-link" %>
-          </li>
-          <% if start_page > 2 %>
-            <li class="page-item disabled"><span class="page-link">...</span></li>
-          <% end %>
-        <% end %>
-
-        <%# ウィンドウ内のページ番号を表示 %>
-        <% (start_page..end_page).each do |page| %>
-          <%# 最初のページと最後のページは外側で制御するため、ウィンドウ内ではスキップ %>
-          <% next if page == 1 && start_page > 1 && total_pages > (window_size * 2 + 1) %>
-          <% next if page == total_pages && end_page < total_pages && total_pages > (window_size * 2 + 1) %>
-          
-          <li class="page-item <%= 'active' if page == current_page %>">
-            <%= link_to page, root_path(tab: params[:tab], period: params[:period], page: page), class: "page-link" %>
-          </li>
-        <% end %>
-
-        <%# 最後のページ（total_pages）がウィンドウに含まれていない場合、...と最後のページを表示 %>
-        <% if end_page < total_pages %>
-          <% if end_page < total_pages - 1 %>
-            <li class="page-item disabled"><span class="page-link">...</span></li>
-          <% end %>
-          <li class="page-item <%= 'active' if total_pages == current_page %>">
-            <%= link_to total_pages, root_path(tab: params[:tab], period: params[:period], page: total_pages), class: "page-link" %>
-          </li>
-        <% end %>
-
-        <%# 3. 次のページリンク %>
-        <li class="page-item <%= 'disabled' if current_page == total_pages %>">
-          <%= link_to "次のページ", 
-                      root_path(tab: params[:tab], period: params[:period], page: current_page + 1), 
-                      class: "page-link" %>
+        <li class="page-item <%= 'active' if page == current_page %>">
+          <%= link_to page, root_path(tab: params[:tab], period: params[:period], channel: params[:channel], page: page), class: "page-link" %>
         </li>
+      <% end -%>
 
-      </ul>
-    </nav>
-  </div>
-<% end %>
+      <%# 最後のページ（total_pages）がウィンドウに含まれていない場合、...と最後のページを表示 -%>
+      <% if end_page < total_pages -%>
+        <% if end_page < total_pages - 1 -%>
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        <% end -%>
+        <li class="page-item <%= 'active' if total_pages == current_page %>">
+          <%= link_to total_pages, root_path(tab: params[:tab], period: params[:period], channel: params[:channel], page: total_pages), class: "page-link" %>
+        </li>
+      <% end -%>
+
+      <%# 3. 次のページリンク %>
+      <li class="page-item <%= 'disabled' if current_page == total_pages %>">
+        <%= link_to "次のページ", 
+                    root_path(tab: params[:tab], period: params[:period], channel: params[:channel], page: current_page + 1), 
+                    class: "page-link" %>
+      </li>
+
+    </ul>
+  </nav>
+</div>
+<% end -%>
