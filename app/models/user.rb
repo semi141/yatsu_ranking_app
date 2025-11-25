@@ -17,13 +17,13 @@ class User < ApplicationRecord
   # Google OAuthでログイン/登録してきたときの処理
   def self.from_omniauth(auth)
     user = where(provider: auth.provider, uid: auth.uid).first_or_initialize
-    user.email          ||= auth.info.email
-    user.name           ||= auth.info.name
-    user.password       ||= Devise.friendly_token[0, 20]
-    user.access_token   = auth.credentials.token
-    user.refresh_token  = auth.credentials.refresh_token if auth.credentials.refresh_token.present?
+    user.email            ||= auth.info.email
+    user.name             ||= auth.info.name
+    user.password         ||= Devise.friendly_token[0, 20]
+    user.access_token     = auth.credentials.token
+    user.refresh_token    = auth.credentials.refresh_token if auth.credentials.refresh_token.present?
 
-    # Googleログインでもapi_tokenが空なら生成する
+    # Googleログインでもapi_tokenが空なら生成する (publicメソッドとして呼び出し)
     user.generate_api_token if user.api_token.blank?
     
     user.save!
@@ -36,12 +36,14 @@ class User < ApplicationRecord
     save!
   end
 
-  private
-
+  # privateからここに移動し、from_omniauthから呼び出せるように
   def generate_api_token
     loop do
       self.api_token = SecureRandom.hex(20)
       break unless User.exists?(api_token: self.api_token)
     end
   end
+
+  private
+  # generate_api_token は削除されました。
 end
