@@ -13,7 +13,7 @@ module YatsuRankingApp
     config.autoload_lib(ignore: %w[assets tasks])
     config.time_zone = 'Tokyo'
     config.active_record.default_timezone = :local
-    require 'bootstrap-icons-rails'
+    require 'bootstrap_icons_rails'
     config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
     config.assets.paths << Gem.loaded_specs['bootstrap-icons-rails'].full_gem_path.join('assets', 'stylesheets')
   end
