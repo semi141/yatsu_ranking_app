@@ -1,6 +1,7 @@
 require_relative "boot"
 
 require "rails/all"
+require "pathname"
 
 Bundler.require(*Rails.groups)
 
@@ -15,6 +16,6 @@ module YatsuRankingApp
     config.active_record.default_timezone = :local
     require 'bootstrap_icons_rails'
     config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
-    config.assets.paths << Gem.loaded_specs['bootstrap_icons_rails'].full_gem_path.join('assets', 'stylesheets')
+    config.assets.paths << Pathname.new(Gem.loaded_specs['bootstrap_icons_rails'].full_gem_path).join('assets', 'stylesheets')
   end
 end
