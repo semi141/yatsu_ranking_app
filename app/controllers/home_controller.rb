@@ -1,4 +1,8 @@
 class HomeController < ApplicationController
+  # チャンネルIDを定数として定義
+  JARUTOWER_ID = "UChwgNUWPM-ksOP3BbfQHS5Q"
+  JARAISLAND_ID = "UCf-wG6PlxW7rpixx1tmODJw"
+
   # 1ページあたりの表示件数を定数として定義
   PER_PAGE = 20
   
@@ -7,7 +11,7 @@ class HomeController < ApplicationController
     @tab = params[:tab] || "my"
     @period = params[:period] || "all" # 'all', 'weekly', 'monthly'
     
-    # --- ページネーション用の計算を追加 ---
+    # ページネーション用の計算
     # 現在のページ番号を取得し、1未満なら1ページ目をデフォルトとする
     @current_page = params[:page].to_i < 1 ? 1 : params[:page].to_i
     # データを取得し始める位置（オフセット）を計算
@@ -15,15 +19,29 @@ class HomeController < ApplicationController
 
     # 期間に応じた Watch スコープを定義
     scoped_watches = Watch.within_period(@period)
+
+    # チャンネル絞り込み用のベースクエリ定義
+    video_base_query = Video.all
+    case params[:channel]
+    when 'tower'
+      video_base_query = video_base_query.where(channel_id: JARUTOWER_ID)
+      @title_prefix = "ジャルジャルタワー限定 "
+    when 'island'
+      video_base_query = video_base_query.where(channel_id: JARAISLAND_ID)
+      @title_prefix = "ジャルジャルアイランド限定 "
+    else
+      @title_prefix = ""
+    end
+    @title = @title_prefix + "動画ランキング"
     
-    # --- 全体ランキング ---
+    # 全体ランキング
     
     # 期間で絞り込んだ watches の視聴数を集計するサブクエリ
     all_watch_summary = scoped_watches.select('video_id, SUM(watched_count) as total_watches_count').group(:video_id)
     
     # Video をその集計データと結合してランキング
     # 一旦クエリとして保存（まだデータは取得しない）
-    @all_rankings_query = Video.joins(
+    @all_rankings_query = video_base_query.joins(
       "INNER JOIN (#{all_watch_summary.to_sql}) AS filtered_watches 
        ON videos.id = filtered_watches.video_id"
     )
@@ -36,7 +54,7 @@ class HomeController < ApplicationController
     # ページネーション適用（LIMITとOFFSETを使用）
     @all_rankings = @all_rankings_query.limit(PER_PAGE).offset(offset_value)
     
-    # --- 自分ランキング ---
+    # 自分ランキング
     
     if user_signed_in?
 
@@ -54,7 +72,7 @@ class HomeController < ApplicationController
                              .group(:video_id)
         
         # 一旦クエリとして保存
-        @my_rankings_query = Video.joins(
+        @my_rankings_query = video_base_query.joins(
           "INNER JOIN (#{my_watch_summary.to_sql}) AS user_filtered_watches 
            ON videos.id = user_filtered_watches.video_id"
         )

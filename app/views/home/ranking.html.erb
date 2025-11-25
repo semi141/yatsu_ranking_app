@@ -24,6 +24,25 @@
     </div>
   </div>
 
+<div class="text-center mb-5">
+  <div class="btn-group btn-group-sm" role="group" aria-label="Ranking Channel">
+    <% # 全てのチャンネル %>
+    <%= link_to "全てのチャンネル", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).except(:channel)), 
+        class: "btn #{params[:channel].blank? || params[:channel] == 'all' ? 'btn-info' : 'btn-outline-info'}" %>
+    
+    <% # タワーのみ %>
+    <%= link_to "タワーのみ", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'tower')), 
+        class: "btn #{params[:channel] == 'tower' ? 'btn-info' : 'btn-outline-info'}" %>
+    
+    <% # アイランドのみ %>
+    <%= link_to "アイランドのみ", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'island')), 
+        class: "btn #{params[:channel] == 'island' ? 'btn-info' : 'btn-outline-info'}" %>
+  </div>
+</div>
+
   <div class="text-center mb-5">
     <div class="btn-group btn-group-sm" role="group">
       <%= link_to "総合", root_path(tab: params[:tab], period: "all"), 

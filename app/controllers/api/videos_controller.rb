@@ -43,14 +43,15 @@ class Api::VideosController < ApplicationController
       v.title        = info[:title]
       v.thumbnail    = info[:thumbnail]
       v.published_at = info[:published_at]
+      v.channel_id = info[:channel_id]
       
       v.video_id     = youtube_id
       v.youtube_id   = youtube_id
     end
 
     # もし既存の動画で video_id が空だった場合のために、毎回更新をかける
-    if video.video_id.blank?
-      video.update(video_id: youtube_id)
+    if video.video_id.blank? || video.channel_id.blank?
+      video.update(video_id: youtube_id, channel_id: info[:channel_id])
     end
 
     # 視聴記録の保存

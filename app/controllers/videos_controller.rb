@@ -1,4 +1,8 @@
 class VideosController < ApplicationController
+  # チャンネルIDを定数として定義
+  JARUTOWER_ID = "UChwgNUWPM-ksOP3BbfQHS5Q"
+  JARAISLAND_ID = "UCf-wG6PlxW7rpixx1tmODJw"
+
   before_action :authenticate_user!, only: [:watched, :update, :remove_tag]
 
   def index
@@ -6,6 +10,17 @@ class VideosController < ApplicationController
     @videos = Video.all
     @title = "動画ランキング"
     @search_term = ""
+
+    # チャンネル絞り込みのロジック
+    case params[:channel]
+    when 'tower'
+      @videos = @videos.where(channel_id: JARUTOWER_ID)
+      @title = "ジャルジャルタワー限定 " + @title
+    when 'island'
+      @videos = @videos.where(channel_id: JARAISLAND_ID)
+      @title = "ジャルジャルアイランド限定 " + @title
+    # else（all または パラメータなし）の場合は Video.all のまま
+    end
 
     if params[:tag].present?
       # タグ検索の場合
@@ -29,7 +44,7 @@ class VideosController < ApplicationController
       @videos = @videos.order(id: :desc)
     end
 
-    # ページネーション（per(20)は適当な値に調整してください）
+    # ページネーション
     @videos = @videos.page(params[:page]).per(20)
   end
 
