@@ -20,8 +20,13 @@ class Api::VideosController < ApplicationController
 
     info = YoutubeService.get_video_info(youtube_id)
 
-    if info.nil? || info[:channel_id].to_s != "UChwgNUWPM-ksOP3BbfQHS5Q"
-      # ジャルジャルタワーの動画ではない場合、強制終了
+    allowed_channel_ids = [
+      "UChwgNUWPM-ksOP3BbfQHS5Q", # ジャルジャルタワー
+      "UCf-wG6PlxW7rpixx1tmODJw"  # ジャルジャルアイランド
+    ]
+
+    if info.nil? || !allowed_channel_ids.include?(info[:channel_id].to_s)
+      # 許可されたチャンネルの動画ではない場合、強制終了
       return head :forbidden
     end
 
