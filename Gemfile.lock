@@ -251,6 +251,8 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.2-x64-mingw-ucrt)
+    pg (1.6.2-x86_64-linux)
     popper_js (2.11.8)
     pp (0.6.3)
       prettyprint
@@ -446,6 +448,7 @@ DEPENDENCIES
   importmap-rails
   jbuilder
   omniauth-google-oauth2
+  pg (>= 1.2, < 2.0)
   puma (>= 5.0)
   rack-cors
   rails (~> 7.2.3)
