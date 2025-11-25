@@ -21,7 +21,17 @@ class Api::VideosController < ApplicationController
     info = YoutubeService.get_video_info(youtube_id)
 
     if info.nil? || info[:channel_id].to_s != "UChwgNUWPM-ksOP3BbfQHS5Q"
-       return head :forbidden
+      # ジャルジャルタワーの動画ではない場合、強制終了
+      return head :forbidden
+    end
+
+    # 「奴」フィルター
+    video_title = info[:title].to_s
+    
+    # 動画タイトルに「奴」が含まれていない場合、強制終了
+    unless video_title.include?('奴')
+      Rails.logger.info "動画タイトルに「奴」が含まれないためブロックしました: #{video_title}"
+      return head :forbidden
     end
 
     video = Video.find_or_create_by!(youtube_id: youtube_id) do |v|
