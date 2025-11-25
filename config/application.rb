@@ -15,6 +15,6 @@ module YatsuRankingApp
     config.active_record.default_timezone = :local
     require 'bootstrap_icons_rails'
     config.assets.paths << Rails.root.join('vendor', 'assets', 'fonts')
-    config.assets.paths << Gem.loaded_specs['bootstrap-icons-rails'].full_gem_path.join('assets', 'stylesheets')
+    config.assets.paths << Gem.loaded_specs['bootstrap_icons_rails'].full_gem_path.join('assets', 'stylesheets')
   end
 end
