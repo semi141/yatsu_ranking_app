@@ -11,5 +11,7 @@ module YatsuRankingApp
     config.session_store :cookie_store, key: '_yatsu_ranking_app_session'
     config.autoload_paths << Rails.root.join('app', 'services')
     config.autoload_lib(ignore: %w[assets tasks])
+    config.time_zone = 'Tokyo'
+    config.active_record.default_timezone = :local
   end
 end
