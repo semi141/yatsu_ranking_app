@@ -210,12 +210,18 @@
           <% end %>
 
         <% else %>
-        <p class="text-center text-muted mt-4 fs-5">
+          <p class="text-center text-muted mt-4 fs-5">
             <strong>ログインすると、あなただけの視聴ランキングが表示されます。</strong><br>
           </p>
-          <div class="text-center mt-3">
-            <%= link_to user_google_oauth2_omniauth_authorize_path, class: "btn btn-primary btn-lg" do %>
+          
+          <div class="d-flex justify-content-center mt-3">
+            <%= link_to user_google_oauth2_omniauth_authorize_path, class: "btn btn-primary btn-lg me-3" do %>
               <i class="fab fa-google me-2"></i> Googleアカウントでログイン
+            <% end %>
+            
+            <%# ゲストログイン用のボタン %>
+            <%= form_with url: users_guest_sign_in_path, method: :post, local: true, class: "d-inline" do |f| %>
+              <%= f.submit "ゲストとしてログイン", class: "btn btn-outline-secondary btn-lg" %>
             <% end %>
           </div>
         <% end %>

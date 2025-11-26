@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     omniauth_callbacks: 'users/omniauth_callbacks'
   }
 
+  post 'users/guest_sign_in', to: 'users/guest_logins#create'
+
   # 動画 (Video) とコメント (Post)
   resources :videos do
     collection do
