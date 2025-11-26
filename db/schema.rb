@@ -70,10 +70,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_042619) do
     t.string "youtube_token"
     t.string "youtube_refresh_token"
     t.datetime "youtube_expires_at"
-    t.string "api_key"
     t.string "api_token"
     t.boolean "guest", default: false, null: false
-    t.index ["api_key"], name: "index_users_on_api_key", unique: true
     t.index ["api_token"], name: "index_users_on_api_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -90,7 +88,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_26_042619) do
     t.string "video_id"
     t.text "description"
     t.datetime "published_at"
-    t.string "thumbnail"
     t.string "youtube_id"
     t.integer "watch_count"
     t.string "channel_id"
