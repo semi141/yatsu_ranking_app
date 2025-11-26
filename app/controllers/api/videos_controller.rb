@@ -41,7 +41,7 @@ class Api::VideosController < ApplicationController
 
     video = Video.find_or_create_by!(youtube_id: youtube_id) do |v|
       v.title        = info[:title]
-      v.thumbnail    = info[:thumbnail]
+      #v.thumbnail    = info[:thumbnail]
       v.published_at = info[:published_at]
       v.channel_id = info[:channel_id]
       
