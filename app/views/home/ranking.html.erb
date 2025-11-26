@@ -45,12 +45,12 @@
 
   <div class="text-center mb-5">
     <div class="btn-group btn-group-sm" role="group">
-      <%= link_to "総合", root_path(tab: params[:tab], period: "all"), 
-          class: "btn #{@period == 'all' ? 'btn-dark' : 'btn-outline-dark'}" %>
-      <%= link_to "月間", root_path(tab: params[:tab], period: "monthly"), 
-          class: "btn #{@period == 'monthly' ? 'btn-dark' : 'btn-outline-dark'}" %>
-      <%= link_to "週間", root_path(tab: params[:tab], period: "weekly"), 
-          class: "btn #{@period == 'weekly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+      <%= link_to "総合", root_path(tab: params[:tab], period: "all", channel: params[:channel]), 
+        class: "btn #{@period == 'all' ? 'btn-dark' : 'btn-outline-dark'}" %>
+      <%= link_to "月間", root_path(tab: params[:tab], period: "monthly", channel: params[:channel]), 
+        class: "btn #{@period == 'monthly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+      <%= link_to "週間", root_path(tab: params[:tab], period: "weekly", channel: params[:channel]), 
+        class: "btn #{@period == 'weekly' ? 'btn-dark' : 'btn-outline-dark'}" %>
     </div>
   </div>
 
