@@ -11,7 +11,7 @@
   ],
   "host_permissions": [
     "https://www.youtube.com/*",
-    "http://localhost:3000/*"
+    "https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/*"
   ],
   "background": {
     "service_worker": "background.js"

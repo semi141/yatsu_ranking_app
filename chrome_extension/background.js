@@ -26,7 +26,7 @@ function sendToRails(videoId) {
     }
 
     console.log("【奴ランキング】送信開始 →", videoId);
-    fetch("http://localhost:3000/api/videos/watched", {
+    fetch("https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/api/videos/watched", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
