@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   # 認証 (Devise, Googleログイン)
   devise_for :users, controllers: {
-    omniauth_callbacks: 'users/omniauth_callbacks'
+    omniauth_callbacks: 'users/omniauth_callbacks',
+    registrations: 'users/registrations'
   }
 
   post 'users/guest_sign_in', to: 'users/guest_logins#create'

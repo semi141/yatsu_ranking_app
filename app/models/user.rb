@@ -44,6 +44,10 @@ class User < ApplicationRecord
     end
   end
 
+  def guest?
+    self.guest # usersテーブルのguestカラムを参照
+  end
+
   private
   # generate_api_token は削除されました。
 end
