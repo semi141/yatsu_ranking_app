@@ -15,52 +15,47 @@
     </div>
   <% end %>
 
-<% if user_signed_in? %>
-  
-  <%# 1. 自分ランキング / 全体ランキング の切り替え %>
   <div class="text-center mb-5">
     <div class="btn-group" role="group">
-      <%= link_to "自分ランキング", root_path(period: @period), 
-          class: "btn #{params[:tab] == 'all' ? 'btn-outline-primary' : 'btn-primary'} px-4" %>
       <%= link_to "全体ランキング", root_path(tab: "all", period: @period), 
-          class: "btn #{params[:tab] == 'all' ? 'btn-primary' : 'btn-outline-primary'} px-4" %>
+        class: "btn #{@tab == 'all' ? 'btn-primary' : 'btn-outline-primary'} px-4" %>
+
+      <%= link_to "自分ランキング", root_path(tab: "my", period: @period), 
+        class: "btn #{@tab == 'all' ? 'btn-outline-primary' : 'btn-primary'} px-4" %> 
     </div>
   </div>
 
-  <%# 2. チャンネルフィルター (全てのチャンネル / タワーのみ / アイランドのみ) %>
-  <div class="text-center mb-5">
-    <div class="btn-group btn-group-sm" role="group" aria-label="Ranking Channel">
-      <% # 全てのチャンネル %>
-      <%= link_to "全てのチャンネル", 
-          root_path(params.to_unsafe_h.slice(:tab, :period).except(:channel)), 
-          class: "btn #{params[:channel].blank? || params[:channel] == 'all' ? 'btn-info' : 'btn-outline-info'}" %>
-      
-      <% # タワーのみ %>
-      <%= link_to "タワーのみ", 
-          root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'tower')), 
-          class: "btn #{params[:channel] == 'tower' ? 'btn-info' : 'btn-outline-info'}" %>
-      
-      <% # アイランドのみ %>
-      <%= link_to "アイランドのみ", 
-          root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'island')), 
-          class: "btn #{params[:channel] == 'island' ? 'btn-info' : 'btn-outline-info'}" %>
-    </div>
-  </div>
+<div class="text-center mb-5">
+  <div class="btn-group btn-group-sm" role="group" aria-label="Ranking Channel">
+    <% # 全てのチャンネル %>
+    <%= link_to "全てのチャンネル", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).except(:channel)), 
+        class: "btn #{params[:channel].blank? || params[:channel] == 'all' ? 'btn-info' : 'btn-outline-info'}" %>
 
-  <%# 3. 期間フィルター (総合 / 月間 / 週間) %>
+    <% # タワーのみ %>
+    <%= link_to "タワーのみ", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'tower')), 
+        class: "btn #{params[:channel] == 'tower' ? 'btn-info' : 'btn-outline-info'}" %>
+
+    <% # アイランドのみ %>
+    <%= link_to "アイランドのみ", 
+        root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'island')), 
+        class: "btn #{params[:channel] == 'island' ? 'btn-info' : 'btn-outline-info'}" %>
+  </div>
+</div>
+
   <div class="text-center mb-5">
     <div class="btn-group btn-group-sm" role="group">
       <%= link_to "総合", root_path(tab: params[:tab], period: "all", channel: params[:channel]), 
-          class: "btn #{@period == 'all' ? 'btn-dark' : 'btn-outline-dark'}" %>
+        class: "btn #{@period == 'all' ? 'btn-dark' : 'btn-outline-dark'}" %>
       <%= link_to "月間", root_path(tab: params[:tab], period: "monthly", channel: params[:channel]), 
-          class: "btn #{@period == 'monthly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+        class: "btn #{@period == 'monthly' ? 'btn-dark' : 'btn-outline-dark'}" %>
       <%= link_to "週間", root_path(tab: params[:tab], period: "weekly", channel: params[:channel]), 
-          class: "btn #{@period == 'weekly' ? 'btn-dark' : 'btn-outline-dark'}" %>
+        class: "btn #{@period == 'weekly' ? 'btn-dark' : 'btn-outline-dark'}" %>
     </div>
   </div>
-<% end %>
 
-  <% if params[:tab] == "all" %>
+  <% if @tab == "all" %>
     <div class="card shadow-sm">
       <div class="card-body">
         <h3 class="card-title text-center mb-4 text-success">全体ランキング</h3>
