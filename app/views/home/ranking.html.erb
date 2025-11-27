@@ -197,12 +197,12 @@
             </p>
             
             <div class="text-center mt-3">
-               <%= link_to "マイページへ移動", mypage_path, class: "btn btn-warning" %>
+               <%= link_to "マイページへ移動(設定画面へ)", mypage_path, class: "btn btn-primary btn-lg" %>
             </div>
           
           <% else %>
             <p class="text-center mt-4 fs-5 fw-bold text-primary">
-              🎉 あと一歩であなた専用のランキングが見られます！
+              あと一歩であなた専用のランキングが見られます！
             </p>
             
             <div class="text-center mt-3 p-3 bg-light rounded border">
@@ -213,7 +213,7 @@
                 下のボタンからマイページへ進み、<strong>APIトークン</strong>をコピー＆ペーストして設定を完了してください。
               </p>
               
-              <%= link_to "マイページへGO！(設定画面へ)", edit_user_registration_path, class: "btn btn-primary btn-lg" %>
+              <%= link_to "マイページへ移動(設定画面へ)", mypage_path, class: "btn btn-primary btn-lg" %>
             </div>
           <% end %>
 

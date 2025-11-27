@@ -3,9 +3,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
 
-  # 拡張機能用APIトークン
-  before_create :generate_api_token
-
   has_many :posts, dependent: :destroy
   has_many :videos, through: :posts
   
@@ -22,9 +19,6 @@ class User < ApplicationRecord
     user.password         ||= Devise.friendly_token[0, 20]
     user.access_token     = auth.credentials.token
     user.refresh_token    = auth.credentials.refresh_token if auth.credentials.refresh_token.present?
-
-    # Googleログインでもapi_tokenが空なら生成する (publicメソッドとして呼び出し)
-    user.generate_api_token if user.api_token.blank?
     
     user.save!
     user
@@ -49,5 +43,4 @@ class User < ApplicationRecord
   end
 
   private
-  # generate_api_token は削除されました。
 end
