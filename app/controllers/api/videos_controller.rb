@@ -2,9 +2,19 @@ class Api::VideosController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [:watched]
 
   def watched
-    # パラメータの受け取り
-    youtube_id = params[:video_id].to_s.strip
-    token = params[:token]
+    begin
+      # ★ 必須の修正：リクエストボディを直接パース
+      request_body = JSON.parse(request.body.read)
+    rescue JSON::ParserError
+      return head :bad_request
+    end
+    
+    # データを request_body から取得するように変更
+    youtube_id = request_body['video_id'].to_s.strip
+    token = request_body['token']
+    
+    # デバッグログは残しておくと便利です
+    Rails.logger.info "--- API Received Token: #{token} (from body) ---"
 
     # バリデーション
     return head :bad_request if youtube_id.blank?
