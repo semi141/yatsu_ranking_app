@@ -78,4 +78,3 @@ chrome.tabs.onActivated.addListener(() => {
 });
 
 checkYouTubeTab();
-setInterval(checkYouTubeTab, 5000);
