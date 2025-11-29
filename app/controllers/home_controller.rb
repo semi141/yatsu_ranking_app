@@ -67,7 +67,6 @@ class HomeController < ApplicationController
     # 自分ランキング
     
     if user_signed_in?
-
       if current_user.api_token.blank?
         # トークンがない場合
         @my_rankings = []
@@ -81,17 +80,18 @@ class HomeController < ApplicationController
                              .select('video_id, SUM(watched_count) as user_watches_count')
                              .group(:video_id)
         
-        # 一旦クエリとして保存
-        @my_rankings_query = video_base_query.joins(
-          "INNER JOIN (#{my_watch_summary.to_sql}) AS user_filtered_watches 
-           ON videos.id = user_filtered_watches.video_id"
-        )
-        .order('user_filtered_watches.user_watches_count DESC')
+        @my_rankings_query = video_base_query
+          .select("videos.*, user_filtered_watches.user_watches_count") 
+          .joins(
+            "INNER JOIN (#{my_watch_summary.to_sql}) AS user_filtered_watches 
+            ON videos.id = user_filtered_watches.video_id"
+          )
+          .order('user_filtered_watches.user_watches_count DESC')
 
         # 総件数を取得して、総ページ数を計算
-        @my_total_count = @my_rankings_query.count
+        @my_total_count = @my_rankings_query.unscope(:select).count
         @my_total_pages = (@my_total_count.to_f / PER_PAGE).ceil
-        
+
         # ページネーション適用
         @my_rankings = @my_rankings_query.limit(PER_PAGE).offset(offset_value)
       end
