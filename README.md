@@ -89,34 +89,35 @@
 現在のアプリのデータ構造（User, Video, Watch, Post, Tagging, Tag）は以下の通りです。
 
 ```text
-┌─────────────────┐       ┌──────────────────┐       ┌─────────────────┐
-│       User      │<-----*|       Watch      |*----->|      Video      |
-├─────────────────┤       ├──────────────────┤       ├─────────────────┤
-│ id: integer     │       │ id: integer      │       │ id: integer     │
-│ api_token: string(UNQ)  │ user_id: integer   │       │ youtube_id: string(UNQ) │
-│ email: string   │       │ video_id: integer  │       │ title: string     │
-│ created_at: time│       │ watched_count: integer │   │ channel_id: string │
-└─────────────────┘       │ created_at: time │       └─────────────────┘
-          *|              └──────────────────┘                 |*
-           |                                                   |
-           |*------>┌──────────────────┐<-----*|
-           |       │       Post       │                       |
-           +------>├──────────────────┤                       +----->┌─────────────────┐
-                   │ id: integer      │                             │      Tagging    │
-                   │ user_id: integer │                             ├─────────────────┤
-                   │ video_id: integer│                             │ video_id: integer │
-                   │ content: text    │                             │ tag_id: integer   │
-                   │ created_at: time │                             └─────────────────┘
-                   └──────────────────┘                                      |
-                                                                             |*
-                                                                             ↓
-                                                                     ┌─────────────────┐
-                                                                     │       Tag       │
-                                                                     ├─────────────────┤
-                                                                     │ name: string(UNQ)│
-                                                                     └─────────────────┘
-                                                                     
-└─────────────────┘
+┌─────────────────┐       ┌──────────────────┐       ┌─────────────────┐
+│       User      │<-----*|       Watch      |*----->|      Video      |
+├─────────────────┤       ├──────────────────┤       ├─────────────────┤
+│ id: integer     │       │ id: integer      │       │ id: integer     │
+│ api_token: string(UNQ)  │ user_id: integer   │       │ youtube_id: string(UNQ) │
+│ email: string   │       │ video_id: integer  │       │ title: string     │
+│ created_at: time│       │ watched_count: integer │   │ channel_id: string │
+└─────────────────┘       │ created_at: time │       └─────────────────┘
+          *|              └──────────────────┘                 |*
+           |                                                   |
+           |*------>┌──────────────────┐<-----*|
+           |       │       Post       │                       |
+           +------>├──────────────────┤                       +----->┌─────────────────┐
+                   │ id: integer      │                             │      Tagging    │
+                   │ user_id: integer │                             ├─────────────────┤
+                   │ video_id: integer│                             │ video_id: integer │
+                   │ content: text    │                             │ tag_id: integer   │
+                   │ created_at: time │                             └─────────────────┘
+                   └──────────────────┘                                      |
+                                                                             |*
+                                                                             ↓
+                                                                     ┌─────────────────┐
+                                                                     │       Tag       │
+                                                                     ├─────────────────┤
+                                                                     │ name: string(UNQ)│
+                                                                     └─────────────────┘
+
+
+
 
 
 
