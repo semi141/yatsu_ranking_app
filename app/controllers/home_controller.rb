@@ -18,6 +18,9 @@ class HomeController < ApplicationController
       @tab = "my"
     end
   end
+
+  def guide
+  end
   
   @period = params[:period] || "all" # 'all', 'weekly', 'monthly'
   

@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   end
 
   # ヘッダー
-  
+  get '/guide', to: 'home#guide', as: :guide
   # マイページ
   get '/mypage', to: 'users#show', as: :mypage 
   
