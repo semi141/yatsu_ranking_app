@@ -55,46 +55,52 @@
 * **認証機能:** Google OAuthによる認証と、体験用のゲストログインに対応。
 * **APIトークン管理:** Chrome拡張機能連携に必要な**専用APIトークン**の発行・再生成機能を実装。
 
+#### その他・利便性・UI/UX
+* **使い方ガイド/免責事項:** 初めてのユーザー向けに、Chrome拡張機能との連携方法や、アプリの利用手順を詳しく解説した専用ページを設置。ページ内で非公式である旨の免責事項も明確に記述し、信頼性を確保。
+* **日本語メッセージ:** DeviseのFlashメッセージを日本語化し、ユーザー体験を向上。
+* **ヘッダーデザイン:** アクションボタン（ログイン/マイページ/ログアウト）とナビゲーションボタンで配色にメリハリをつけ、視認性を最適化。
+
 ### 7. 主な使用技術と技術的な工夫 💡
 
-| カテゴリ | 技術名 | 特筆すべき工夫・挑戦点 |
-| :--- | :--- | :--- |
-| **バックエンド** | Ruby (3.3.3), Ruby on Rails (7.2.3) | **高度なSQLサブクエリ**を使用し、視聴記録テーブル（`Watch`）を結合してランキングを効率的に集計。 |
-| **外部連携** | **Chrome拡張機能 (JavaScript)**, **独自API** | YouTube公式API廃止に対応し、専用のAPIトークン認証（`User.api_token`）で安全かつ確実に視聴記録を受信。 |
-| **データベース** | PostgreSQL (本番), SQLite3 (開発) | **`Watch`モデル**を独立させ、視聴記録とコメント（`Post`）のデータを分離することで集計の拡張性を確保。 |
-| **タグ機能** | `acts-as-taggable-on` | **タグ編集モード**という独自のJavaScript/UIを実装し、誤操作を防ぎつつ柔軟なタグ付け・削除を実現。 |
-| **UI/UX** | Bootstrap, YouTube IFrame Player API | **自前で`OFFSET`/`LIMIT`を制御**するページネーションを実装。動画詳細ページでの再生時カウント重複防止ロジックも実装。 |
-| **テスト** | **Minitest** | 当初予定していたRSpecから、環境と要件に合わせて**Minitest**に移行し、機能の動作保証を担保。 |
-| **認証** | Devise, `omniauth-google-oauth2` | Google OAuthによる認証基盤を構築し、ゲストログイン機能を実装。 |
+カテゴリ	技術名	特筆すべき工夫・挑戦点
+バックエンド	Ruby (3.3.3), Ruby on Rails (7.2.3)	高度なSQLサブクエリを使用し、視聴記録テーブル（Watch）を結合してランキングを効率的に集計。
+外部連携	Chrome拡張機能 (JavaScript), 独自API	YouTube公式API廃止に対応し、専用のAPIトークン認証（User.api_token）で安全かつ確実に視聴記録を受信。
+データベース	PostgreSQL (本番), SQLite3 (開発)	Watchモデルを独立させ、視聴記録とコメント（Post）のデータを分離することで集計の拡張性を確保。
+タグ機能	acts-as-taggable-on	タグ編集モードという独自のJavaScript/UIを実装し、誤操作を防ぎつつ柔軟なタグ付け・削除を実現。
+UI/UX	Bootstrap, YouTube IFrame Player API	自前でOFFSET/LIMITを制御するページネーションを実装。動画詳細ページでの再生時カウント重複防止ロジックも実装。ヘッダーUIを機能に応じて配色し、視認性を高めた。
+テスト	Minitest	当初予定していたRSpecから、環境と要件に合わせてMinitestに移行し、機能の動作保証を担保。
+認証/I18n	Devise, omniauth-google-oauth2	Google OAuthによる認証基盤を構築し、ゲストログイン機能を実装。メッセージの国際化（I18n）対応により、ユーザーへのメッセージを日本語化。
 
 ### 8. ER図
 
+```text
 ┌─────────────────┐       ┌──────────────────┐       ┌─────────────────┐
-│      User       │<-----*|       Watch        |*----->|      Video      |
+│       User      │<-----*|       Watch      |*----->|      Video      |
 ├─────────────────┤       ├──────────────────┤       ├─────────────────┤
 │ id: integer     │       │ id: integer      │       │ id: integer     │
 │ api_token: string(UNQ)  │ user_id: integer   │       │ youtube_id: string(UNQ) │
-│ email: string   │       │ video_id: integer  │       │ title: string   │
+│ email: string   │       │ video_id: integer  │       │ title: string     │
 │ created_at: time│       │ watched_count: integer │   │ channel_id: string │
 └─────────────────┘       │ created_at: time │       └─────────────────┘
-         *|                └──────────────────┘                 |*
-          |                                                     |
-          |*------>┌──────────────────┐<-----*|
-          |       │       Post       │                        |
-          +------>├──────────────────┤                        +----->┌─────────────────┐
-                  │ id: integer      │                              │     Tagging     │
-                  │ user_id: integer │                              ├─────────────────┤
-                  │ video_id: integer│                              │ video_id: integer │
-                  │ content: text    │                              │ tag_id: integer │
-                  │ created_at: time │                              └─────────────────┘
-                  └──────────────────┘                                        |
-                                                                              |*
-                                                                              ↓
-                                                                  ┌─────────────────┐
-                                                                  │       Tag       │
-                                                                  ├─────────────────┤
-                                                                  │ name: string(UNQ)│
-                                                                  └─────────────────┘
+          *|              └──────────────────┘                 |*
+           |                                                   |
+           |*------>┌──────────────────┐<-----*|
+           |       │       Post       │                       |
+           +------>├──────────────────┤                       +----->┌─────────────────┐
+                   │ id: integer      │                             │      Tagging    │
+                   │ user_id: integer │                             ├─────────────────┤
+                   │ video_id: integer│                             │ video_id: integer │
+                   │ content: text    │                             │ tag_id: integer   │
+                   │ created_at: time │                             └─────────────────┘
+                   └──────────────────┘                                      |
+                                                                             |*
+                                                                             ↓
+                                                                     ┌─────────────────┐
+                                                                     │       Tag       │
+                                                                     ├─────────────────┤
+                                                                     │ name: string(UNQ)│
+                                                                     └─────────────────┘
+                                                                     ---
 
 ### 9. 今後の展望
 
