@@ -1,0 +1,7 @@
+ja:
+  devise:
+    sessions:
+      signed_in: 'Googleアカウントで認証しました。' # ログイン成功時
+      signed_out: 'ログアウトしました。' # ログアウト成功時
+    omniauth_callbacks:
+      success: '%{kind}アカウントでの認証に成功しました。' # OAuth成功時 (Google, kind=Google)
