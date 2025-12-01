@@ -16,12 +16,12 @@
       <% end %>
 
       <% if user_signed_in? %>
-        <%= link_to mypage_path, class: 'btn btn-link text-light text-decoration-none' do %>
+        <%= link_to mypage_path, class: 'btn btn-primary' do %>
           👤 マイページ
         <% end %>
         
-        <%= button_to destroy_user_session_path, method: :delete, class: 'btn btn-link text-light text-decoration-none ms-2' do %>
-          <small>ログアウト</small>
+        <%= button_to destroy_user_session_path, method: :delete, class: 'btn btn-danger ms-2' do %>
+          ログアウト
         <% end %>
 
       <% else %>
