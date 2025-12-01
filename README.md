@@ -20,6 +20,11 @@
 ### 3. サービスのURL
 **[https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/](https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/)**
 
+#### 🔗 Chrome拡張機能のリポジトリ（視聴記録連携用）
+本アプリのコア機能である視聴記録の取得に使用するChrome拡張機能のソースコードとインストール手順はこちらをご確認ください。
+
+[Chrome拡張機能ソースコード](https://github.com/semi141/yatsu_ranking_app/tree/main/chrome_extension)
+
 ### 4. サービスの詳細・概要
 
 「奴ランキング見る奴」は、YouTubeチャンネル「ジャルジャルタワー」と「ジャルジャルアイランド」の中でも、**タイトルに「奴」を含む動画**の視聴記録に特化したWebアプリケーションです。
@@ -76,7 +81,7 @@
 * Heroku (デプロイ)
 * Git / GitHub (バージョン管理)
 
-#### 技術的な工夫・挑戦点 (Summary)
+#### 技術的な工夫・挑戦点
 
 本アプリでは、YouTube公式APIの利用制限を回避するため、**独自のChrome拡張機能とAPIトークン認証を組み合わせた外部連携システム**を構築しています。これにより、ユーザーの視聴記録を安全かつ確実に受信できる基盤を確立しました。
 
