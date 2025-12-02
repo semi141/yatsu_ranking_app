@@ -20,10 +20,11 @@
 ### 3. サービスのURL
 **[https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/](https://yatsu-ranking-viewer-5fd11a800c35.herokuapp.com/)**
 
-#### Chrome拡張機能のリポジトリ（視聴記録連携用）
-本アプリのコア機能である視聴記録の取得に使用するChrome拡張機能のソースコードとインストール手順はこちらをご確認ください。
+#### 🔗 Chrome拡張機能のリポジトリ（視聴記録連携用）
+本アプリのコア機能である視聴記録の取得に使用するChrome拡張機能のソースコードはこちらで公開しています。
 
-[Chrome拡張機能ソースコード](https://github.com/semi141/yatsu_ranking_app/tree/main/chrome_extension)
+* **ソースコード:** [yatsu-ranking-extension](https://github.com/semi141/yatsu-ranking-extension)
+* **インストール手順:** アプリ内の**マイページ**をご確認ください。
 
 ### 4. サービスの詳細・概要
 
