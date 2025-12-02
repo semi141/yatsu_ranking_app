@@ -11,11 +11,10 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       )
 
       sign_in @user, event: :authentication
-      
-      # 記憶されたリダイレクト先があればそこへ、なければトップページへ飛ばす
-      redirect_to stored_location_for(@user) || root_path
 
-      set_flash_message(:notice, :success, kind: "Google") if is_navigational_format?
+      flash[:notice] = t('devise.sessions.signed_in') 
+
+      redirect_to stored_location_for(@user) || root_path
 
     else
       session["devise.google_data"] = auth.except("extra")
