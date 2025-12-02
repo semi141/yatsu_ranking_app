@@ -1,3 +1,5 @@
+# app/controllers/users/omniauth_callbacks_controller.rb
+
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
     auth = request.env["omniauth.auth"]
@@ -12,8 +14,9 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       sign_in @user, event: :authentication
 
-      flash[:notice] = t('devise.sessions.signed_in') 
-
+      flash[:notice] = 'Googleアカウントで認証しました。' 
+      
+      # 記憶されたリダイレクト先があればそこへ、なければトップページへ飛ばす
       redirect_to stored_location_for(@user) || root_path
 
     else

@@ -1,12 +1,12 @@
+# app/controllers/users/sessions_controller.rb
+
 class Users::SessionsController < Devise::SessionsController
   def destroy
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
 
     if signed_out && is_navigational_format?
-
-      flash[:notice] = t('devise.sessions.signed_out') 
+      flash[:notice] = 'ログアウトしました。' 
     end
-    # ----------------------------------------------------
     
     # 既存のログアウト後のリダイレクト処理
     yield resource if resource
