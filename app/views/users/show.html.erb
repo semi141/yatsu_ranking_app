@@ -36,19 +36,20 @@
         <h4 class="alert-heading">ステップ 1: 拡張機能のインストール（デベロッパーモードで手動読み込み）</h4>
         <ol class="list-group list-group-numbered mb-3">
           <li class="list-group-item">
-            以下のボタンから**拡張機能を含むプロジェクト全体**をZIPファイルでダウンロードします。
+            以下のボタンから**拡張機能のファイル一式**をZIPファイルでダウンロードします。
             <p class="mt-2 text-center">
               <%= link_to "💾 拡張機能ZIPファイルをダウンロード", "https://github.com/semi141/yatsu-ranking-extension/archive/refs/heads/master.zip", class: "btn btn-info btn-lg text-white font-weight-bold", target: "_blank" %>
+            </p>
           </li>
           <li class="list-group-item">
-            ダウンロードしたZIPファイルを展開し、その中の**`chrome_extension`フォルダ**をデスクトップなど分かりやすい場所に移動させます。
+            ダウンロードしたZIPファイルを展開すると、**`yatsu-ranking-extension-master`**という名前のフォルダが作成されます。このフォルダをデスクトップなど分かりやすい場所に移動させます。
           </li>
           <li class="list-group-item">
             Chromeブラウザでアドレスバーに <code class="text-danger">chrome://extensions</code> と入力し、拡張機能管理ページを開きます。右上の**「デベロッパーモード」**をオンにします。
             
           </li>
           <li class="list-group-item">
-            **「パッケージ化されていない拡張機能を読み込む」**ボタンを押し、先ほど移動させた**`chrome_extension`フォルダ**を選択します。
+            **「パッケージ化されていない拡張機能を読み込む」**ボタンを押し、先ほど移動させた**`yatsu-ranking-extension-master`フォルダ**を選択します。
           </li>
         </ol>
       </div>
@@ -58,13 +59,13 @@
         <li class="list-group-item">👆 上記の<strong>「Chrome拡張機能用トークン」</strong>をコピーします。</li>
         <li class="list-group-item">
           お使いのChromeブラウザで、アドレスバーの右側にある
-          **パズルのピースの形をしたアイコン（拡張機能メニュー）**
+          <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
           をクリックし、表示された一覧から
-          **「奴ランキング見る奴」拡張機能のアイコン**
+          <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
           を探してクリックします。
         </li>
         <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
-        <li class="list-group-item">拡張機能が有効になり、**YouTubeで動画を視聴するたびに視聴回数が自動で記録**されます！</li>
+        <li class="list_group-item">拡張機能が有効になり、**YouTubeで動画を視聴するたびに視聴回数が自動で記録**されます！</li>
       </ol>
       <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
     </div>
