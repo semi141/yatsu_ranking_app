@@ -2,29 +2,6 @@
   <h1 class="mb-4">マイページ</h1>
   <p class="lead">ようこそ、<strong><%= current_user.name %></strong>さん！</p>
 
-  <div class="card mt-5 border-primary">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Chrome拡張機能用トークン</h3>
-    </div>
-    <div class="card-body">
-      <p>以下のトークンを拡張機能の設定画面に<strong>コピー</strong>してね</p>
-
-      <div class="alert alert-warning">
-        <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
-      </div>
-
-      <pre class="bg-light p-4 rounded" style="font-size:1.1em; overflow-x:auto;">
-<%= current_user.api_token %>
-      </pre>
-
-      <%= button_to "トークンを再生成する（古いトークンは無効になります）", 
-          regenerate_token_users_path, 
-          method: :post,
-          data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
-          class: "btn btn-danger btn-lg mt-3" %>
-    </div>
-  </div>
-
   <div class="card mt-5 border-success">
     <div class="card-header bg-success text-white">
       <h3 class="mb-0">拡張機能の利用開始手順</h3>
@@ -56,7 +33,7 @@
 
       <h4 class="mt-4">ステップ 2: トークンの設定</h4>
       <ol class="list-group list-group-numbered">
-        <li class="list-group-item">👆 上記の<strong>「Chrome拡張機能用トークン」</strong>をコピーします。</li>
+        <li class="list-group-item"> 次のセクションにある<strong>「Chrome拡張機能用トークン」</strong>をコピーします。</li>
         <li class="list_group-item">
           お使いのChromeブラウザで、アドレスバーの右側にある
           <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
@@ -68,6 +45,28 @@
         <li class="list_group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
       </ol>
       <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
+    </div>
+  </div>
+  <div class="card mt-5 border-primary">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Chrome拡張機能用トークン</h3>
+    </div>
+    <div class="card-body">
+      <p>以下のトークンを拡張機能の設定画面に<strong>コピー</strong>してね</p>
+
+      <div class="alert alert-warning">
+        <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
+      </div>
+
+      <pre class="bg-light p-4 rounded" style="font-size:1.1em; overflow-x:auto;">
+<%= current_user.api_token %>
+      </pre>
+
+      <%= button_to "トークンを再生成する（古いトークンは無効になります）", 
+          regenerate_token_users_path, 
+          method: :post,
+          data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
+          class: "btn btn-danger btn-lg mt-3" %>
     </div>
   </div>
   <div class="mt-5 text-center">
