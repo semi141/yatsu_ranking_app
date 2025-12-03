@@ -26,12 +26,16 @@
           </li>
           <li class="list-group-item">
             <strong>「パッケージ化されていない拡張機能を読み込む」</strong>ボタンを押し、先ほど移動させた<strong>`yatsu-ranking-extension-master`フォルダ</strong>を選択します。
+            <div class="mt-3 text-center">
+              <img src="/images/chrome_extension手順.jpg" class="img-fluid border rounded shadow-sm" alt="Chrome拡張機能のデベロッパーモードと読み込みボタンの操作">
+            </div>
           </li>
         </ol>
       </div>
+
       <div class="alert alert-info py-3 mt-5" role="alert">
         <h4 class="alert-heading">ステップ 2 の準備: トークンのコピー</h4>
-        <p>以下の<strong>専用APIトークン</strong>をコピーし、**ステップ 3** で使用します。</p>
+        <p>以下の<strong>専用APIトークン</strong>をコピーし、<strong>ステップ 3</strong> で使用します。</p>
 
         <div class="alert alert-warning">
           <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
@@ -47,23 +51,35 @@
             data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
             class: "btn btn-danger btn-lg mt-3" %>
       </div>
+      
       <div class="alert alert-info py-3 mt-5" role="alert">
         <h4 class="alert-heading">ステップ 3: 拡張機能の設定画面への入力</h4>
         <ol class="list-group list-group-numbered">
-          <li class="list-group-item">👆 上記の**ステップ 2 でコピーしたトークン**を用意します。</li>
+          <li class="list-group-item">👆 上記の<strong>ステップ 2 でコピーしたトークン</strong>を用意します。
+            <div class="mt-3 text-center">
+              <img src="/images/トークン入力手順1.jpg" class="img-fluid border rounded shadow-sm" alt="パズルのピースアイコンをクリックして拡張機能メニューを開く">
+            </div>
+          </li>
           <li class="list-group-item">
             お使いのChromeブラウザで、アドレスバーの右側にある
             <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
             をクリックし、表示された一覧から
             <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
             を探してクリックします。
+            <div class="mt-3 text-center">
+              <img src="/images/トークン入力手順2.jpg" class="img-fluid border rounded shadow-sm" alt="拡張機能メニューからアイコンをクリックする手順">
+            </div>
           </li>
-          <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
+          <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。
+            <div class="mt-3 text-center">
+              <img src="/images/トークン入力手順3.jpg" class="img-fluid border rounded shadow-sm" alt="拡張機能の設定フォームにトークンを貼り付ける手順">
+            </div>
+          </li>
           <li class="list-group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
         </ol>
         <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
       </div>
-      </div>
+    </div>
   </div>
 
   <div class="mt-5 text-center">
