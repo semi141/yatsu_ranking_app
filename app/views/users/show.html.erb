@@ -23,7 +23,6 @@
           </li>
           <li class="list-group-item">
             Chromeブラウザでアドレスバーに <code class="text-danger">chrome://extensions</code> と入力し、拡張機能管理ページを開きます。右上の<strong>「デベロッパーモード」</strong>をオンにします。
-            
           </li>
           <li class="list-group-item">
             <strong>「パッケージ化されていない拡張機能を読み込む」</strong>ボタンを押し、先ほど移動させた<strong>`yatsu-ranking-extension-master`フォルダ</strong>を選択します。
@@ -31,28 +30,8 @@
         </ol>
       </div>
 
-      <h4 class="mt-4">ステップ 2: トークンの設定</h4>
-      <ol class="list-group list-group-numbered">
-        <li class="list-group-item"> 下記の<strong>「Chrome拡張機能用トークン」</strong>をコピーします。</li>
-        <li class="list_group-item">
-          お使いのChromeブラウザで、アドレスバーの右側にある
-          <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
-          をクリックし、表示された一覧から
-          <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
-          を探してクリックします。
-        </li>
-        <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
-        <li class="list_group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
-      </ol>
-      <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
-    </div>
-  </div>
-  <div class="card mt-5 border-primary">
-    <div class="card-header bg-primary text-white">
-      <h3 class="mb-0">Chrome拡張機能用トークン</h3>
-    </div>
-    <div class="card-body">
-      <p>下記のトークンを拡張機能の設定画面に<strong>コピー</strong>してね</p>
+      <h4 class="mt-5">🔑 ステップ 2 の準備: トークンのコピー</h4>
+      <p>以下の<strong>専用APIトークン</strong>をコピーし、次のステップで使用します。</p>
 
       <div class="alert alert-warning">
         <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
@@ -67,6 +46,20 @@
           method: :post,
           data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
           class: "btn btn-danger btn-lg mt-3" %>
+      <h4 class="mt-5">ステップ 2: 拡張機能の設定画面への入力</h4>
+      <ol class="list-group list-group-numbered">
+        <li class="list-group-item">👆 上記で<strong>コピーしたトークン</strong>を用意します。</li>
+        <li class="list_group-item">
+          お使いのChromeブラウザで、アドレスバーの右側にある
+          <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
+          をクリックし、表示された一覧から
+          <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
+          を探してクリックします。
+        </li>
+        <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
+        <li class="list_group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
+      </ol>
+      <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
     </div>
   </div>
   <div class="mt-5 text-center">
