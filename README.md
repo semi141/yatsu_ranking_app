@@ -9,7 +9,7 @@
 ### 2. サービス画像
 
 #### ランキング画面（全体ランキング）
-![ランキング画面のスクリーンショット](https://raw.githubusercontent.com/semi141/yatsu_ranking_app/main/images/ランキングページ.PNG)
+![ランキング画面のスクリーンショット]
 
 #### 動画詳細画面
 ![動画詳細画面のスクリーンショット](https://raw.githubusercontent.com/semi141/yatsu_ranking_app/main/images/動画詳細ページ.PNG)
