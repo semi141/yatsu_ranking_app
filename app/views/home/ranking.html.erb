@@ -29,25 +29,28 @@
   </div>
 
   <% if is_filter_visible %>
-    <div class="text-center mb-5">
-      <div class="btn-group btn-group-sm" role="group" aria-label="Ranking Channel">
-        <% # 全てのチャンネル %>
-        <%= link_to "全てのチャンネル", 
-            root_path(params.to_unsafe_h.slice(:tab, :period).except(:channel)), 
-            class: "btn #{params[:channel].blank? || params[:channel] == 'all' ? 'btn-info' : 'btn-outline-info'}" %>
+   <div class="text-center mb-5">
+     <div class="btn-group btn-group-sm" role="group" aria-label="Ranking Channel">
+       <% # 全てのチャンネル %>
+       <%= link_to "全てのチャンネル",
+           root_path(params.to_unsafe_h.slice(:tab, :period).except(:channel)),
+           # 変更点: btn-info と btn-outline-info を btn-primary と btn-outline-primary に変更
+           class: "btn #{params[:channel].blank? || params[:channel] == 'all' ? 'btn-primary' : 'btn-outline-primary'}" %>
 
-        <% # タワーのみ %>
-        <%= link_to "タワーのみ", 
-            root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'tower')), 
-            class: "btn #{params[:channel] == 'tower' ? 'btn-info' : 'btn-outline-info'}" %>
+       <% # タワーのみ %>
+       <%= link_to "タワーのみ",
+           root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'tower')),
+           # 変更点: btn-info と btn-outline-info を btn-primary と btn-outline-primary に変更
+           class: "btn #{params[:channel] == 'tower' ? 'btn-primary' : 'btn-outline-primary'}" %>
 
-        <% # アイランドのみ %>
-        <%= link_to "アイランドのみ", 
-            root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'island')), 
-            class: "btn #{params[:channel] == 'island' ? 'btn-info' : 'btn-outline-info'}" %>
-      </div>
-    </div>
-  <% end %>
+       <% # アイランドのみ %>
+       <%= link_to "アイランドのみ",
+           root_path(params.to_unsafe_h.slice(:tab, :period).merge(channel: 'island')),
+           # 変更点: btn-info と btn-outline-info を btn-primary と btn-outline-primary に変更
+           class: "btn #{params[:channel] == 'island' ? 'btn-primary' : 'btn-outline-primary'}" %>
+     </div>
+   </div>
+ <% end %>
 
   <% if is_filter_visible %>
     <div class="text-center mb-5">
