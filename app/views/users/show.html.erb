@@ -1,6 +1,6 @@
 <div class="container mt-5">
   <h1 class="mb-4">マイページ</h1>
-  <p class="lead">ようこそ、<strong><%= current_user.name %></strong>さん！!</p>
+  <p class="lead">ようこそ、<strong><%= current_user.name %></strong>さん！</p>
 
   <div class="card mt-5 border-success">
     <div class="card-header bg-success text-white">
@@ -83,6 +83,6 @@
   </div>
 
   <div class="mt-5 text-center">
-    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class="btn btn-secondary btn-lg" %>
-  </div>
+    <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class="btn btn-secondary btn-lg " %>
+    </div>
 </div>
