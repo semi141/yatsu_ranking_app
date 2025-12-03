@@ -29,39 +29,43 @@
           </li>
         </ol>
       </div>
+      <div class="alert alert-info py-3 mt-5" role="alert">
+        <h4 class="alert-heading">ステップ 2 の準備: トークンのコピー</h4>
+        <p>以下の<strong>専用APIトークン</strong>をコピーし、**ステップ 3** で使用します。</p>
 
-      <h4 class="mt-5">🔑 ステップ 2 の準備: トークンのコピー</h4>
-      <p>以下の<strong>専用APIトークン</strong>をコピーし、次のステップで使用します。</p>
+        <div class="alert alert-warning">
+          <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
+        </div>
 
-      <div class="alert alert-warning">
-        <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
-      </div>
-
-      <pre class="bg-light p-4 rounded" style="font-size:1.1em; overflow-x:auto;">
+        <pre class="bg-light p-4 rounded" style="font-size:1.1em; overflow-x:auto;">
 <%= current_user.api_token %>
-      </pre>
+        </pre>
 
-      <%= button_to "トークンを再生成する（古いトークンは無効になります）", 
-          regenerate_token_users_path, 
-          method: :post,
-          data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
-          class: "btn btn-danger btn-lg mt-3" %>
-      <h4 class="mt-5">ステップ 2: 拡張機能の設定画面への入力</h4>
-      <ol class="list-group list-group-numbered">
-        <li class="list-group-item">👆 上記で<strong>コピーしたトークン</strong>を用意します。</li>
-        <li class="list_group-item">
-          お使いのChromeブラウザで、アドレスバーの右側にある
-          <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
-          をクリックし、表示された一覧から
-          <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
-          を探してクリックします。
-        </li>
-        <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
-        <li class="list_group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
-      </ol>
-      <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
-    </div>
+        <%= button_to "トークンを再生成する（古いトークンは無効になります）", 
+            regenerate_token_users_path, 
+            method: :post,
+            data: { confirm: "本当に再生成しますか？\n拡張機能の設定も必ず更新してね！" },
+            class: "btn btn-danger btn-lg mt-3" %>
+      </div>
+      <div class="alert alert-info py-3 mt-5" role="alert">
+        <h4 class="alert-heading">ステップ 3: 拡張機能の設定画面への入力</h4>
+        <ol class="list-group list-group-numbered">
+          <li class="list-group-item">👆 上記の**ステップ 2 でコピーしたトークン**を用意します。</li>
+          <li class="list-group-item">
+            お使いのChromeブラウザで、アドレスバーの右側にある
+            <strong>パズルのピースの形をしたアイコン（拡張機能メニュー）</strong>
+            をクリックし、表示された一覧から
+            <strong>「奴ランキング見る奴」拡張機能のアイコン</strong>
+            を探してクリックします。
+          </li>
+          <li class="list-group-item">開いた設定画面のフォームに、コピーしたトークンを<strong>貼り付け</strong>て保存します。</li>
+          <li class="list-group-item">拡張機能が有効になり、<strong>YouTubeで動画を視聴するたびに視聴回数が自動で記録</strong>されます！</li>
+        </ol>
+        <p class="mt-4 text-muted">※ もしうまく動かない場合は、Chrome拡張機能の設定画面でトークンを再確認するか、このページでトークンを再生成してください。</p>
+      </div>
+      </div>
   </div>
+
   <div class="mt-5 text-center">
     <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "btn btn-secondary btn-lg" %>
   </div>
