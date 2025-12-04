@@ -25,12 +25,17 @@
         <% end %>
 
       <% else %>
-        <%= link_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: 'btn btn-primary' do %>
+        <%# ユーザーがログアウトしている場合 %>
+        
+        <%# Googleログインボタン %>
+        <%# me-5 (マージンエンド) でボタン同士の間隔を広げる %>
+        <%= link_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: 'btn btn-primary btn-lg me-5' do %>
           Googleログイン
         <% end %>
-
+        
+        <%# ゲストログインボタン %>
         <%= form_with url: users_guest_sign_in_path, method: :post, local: true, class: "d-inline" do |f| %>
-          <%= f.submit "ゲストログイン", class: "btn btn-light" %>
+          <%= f.submit "ゲストログイン", class: "btn btn-outline-primary btn-lg" %>
         <% end %>
       <% end %>
 
