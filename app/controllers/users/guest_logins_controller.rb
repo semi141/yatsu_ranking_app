@@ -1,19 +1,22 @@
-GUEST_USER_EMAIL = "guest@example.com"
-
 class Users::GuestLoginsController < ApplicationController
-  # ログイン状態でも実行できるように
-  before_action :authenticate_user!, except: [:create]
-
-  # ゲストログイン処理
+  # ゲストユーザー作成とログイン処理
   def create
+    # ユーザーを新規作成し、ゲストフラグとランダムなメールアドレスを設定
+    # `find_or_create_by!` の代わりに `new` と `save!` を使うことで、アクセスごとに新しいゲストを作成
+    user = User.new(
+      email: SecureRandom.uuid + "@guest.local", # ゲスト専用のメールアドレス
+      password: SecureRandom.urlsafe_base64,     # ランダムなパスワード
+      guest: true                                # ゲストユーザーであるフラグ
+    )
     
-    # ゲストユーザーを見つける
-    user = User.find_by!(email: GUEST_USER_EMAIL)
-    
-    # ユーザーをログインさせる (Deviseのヘルパーメソッド)
-    sign_in user 
-    
-    # ログイン後のページにリダイレクト
-    redirect_to root_path, notice: "ゲストユーザーとしてログインしました！"
+    # ユーザーの保存
+    if user.save
+      # 作成したユーザーでログインさせる (Deviseのヘルパーメソッド)
+      sign_in user 
+      redirect_to root_path, notice: "ゲストユーザーとしてログインしました！データはセッション終了後にリセットされます。"
+    else
+      # ユーザー作成失敗時
+      redirect_to root_path, alert: "ゲストログインに失敗しました。"
+    end
   end
 end
