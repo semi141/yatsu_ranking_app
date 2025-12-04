@@ -2,6 +2,16 @@
   <h1 class="mb-4">マイページ</h1>
   <p class="lead">ようこそ、<strong><%= current_user.name %></strong>さん！</p>
 
+  #ゲストユーザー向けの警告と案内
+  <% if current_user.guest? %>
+    <div class="alert alert-danger p-4 my-5 text-center border-3 border-danger">
+      <h3 class="fw-bold mb-3 text-danger">🚨 ゲストユーザーの皆様へ 🚨</h3>
+      <p class="fs-5 fw-bold">あなたは現在、<strong>一時的なアカウント</strong>でログインしています。</p>
+      <p class="mb-2">このページで拡張機能の設定を行うと、視聴履歴は記録されますが、そのデータ（アカウント、トークン、視聴履歴）は<strong>毎日（24時間以内）に自動削除されます</strong>。</p>
+      <p class="mb-0">永続的に視聴履歴を記録したい場合は、一度ログアウトし、<strong>Googleアカウントで本登録</strong>してください。</p>
+    </div>
+  <% end %>
+
   <div class="card mt-5 border-success">
     <div class="card-header bg-success text-white">
       <h3 class="mb-0">拡張機能の利用開始手順</h3>
@@ -35,7 +45,7 @@
 
       <div class="alert alert-info py-3 mt-5" role="alert">
         <h4 class="alert-heading">ステップ 2: トークンのコピー</h4>
-        <p>以下の<strong>専用APIトークン</strong>をコピーし、<strong>ステップ 3</strong> で使用します。</p>
+        <p>以下の<strong>専用APIトークン</strong>をコピーし、<strong>ステップ 3</strong> で使用します。<br>(白枠の中にトークンが表示されていない場合は赤いボタンの「トークンを再生成する」を押してください。)</p>
 
         <div class="alert alert-warning">
           <strong>⚠ 注意：このトークンは絶対に他人に見せないで！漏れると他人に成り済まされちゃうよ！</strong>
