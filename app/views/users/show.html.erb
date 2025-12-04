@@ -7,10 +7,10 @@
   <%# --- ゲストユーザー向けの警告と案内（トーンダウン修正） --- %>
   <% if current_user.guest? %>
     <div class="alert alert-warning p-4 my-5 text-center border-3 border-warning">
-      <h3 class="fw-bold mb-3 text-warning">🔔 ゲストユーザーとしてログイン中</h3>
-      <p class="fs-5 fw-bold">現在、**一時的なお試しアカウント**でご利用いただいています。</p>
-      <p class="mb-2">このアカウントで視聴履歴を記録できますが、データ（アカウント、トークン、視聴履歴）は**毎日（24時間以内）に自動で削除**されます。</p>
-      <p class="mb-0">永続的に視聴履歴を記録したい場合は、一度ログアウトし、**Googleアカウントで本登録**してください。</p>
+      <h3 class="fw-bold mb-3 text-warning">ゲストユーザーとしてログイン中</h3>
+      <p class="fs-5 fw-bold">現在、<strong>一時的なお試しアカウント</strong>でご利用いただいています。</p>
+      <p class="mb-2">ゲストとして記録した視聴データは<strong>24時間以内に自動で削除</strong>されます。</p>
+      <p class="mb-0">永続的に視聴履歴を記録したい場合は、一度ログアウトし、<strong>Googleアカウントで本登録</strong>してください。</p>
     </div>
   <% end %>
 
