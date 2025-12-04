@@ -68,7 +68,6 @@ class HomeController < ApplicationController
   @all_rankings = @all_rankings_query.limit(PER_PAGE).offset(offset_value)
     
     # 自分ランキング
-    
     if user_signed_in?
       if current_user.api_token.blank?
         # トークンがない場合

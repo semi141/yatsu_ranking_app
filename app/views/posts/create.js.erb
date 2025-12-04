@@ -1,20 +1,12 @@
-<%# app/views/posts/_post.html.erb %>
 <% post = post %>
-
-<%# 「YouTubeで視聴！自動登録」などの不要なPostはここで表示しないようにします %>
 <% unless post.content == "YouTubeで視聴！自動登録" %>
 
-  <%# ★修正点1: py-3 (上下の余白) を py-2 に変更してスペースを詰める★ %>
   <div id="post-<%= post.id %>" class="py-2">
     
-    <%# 匿名化済み: 日時のみを表示（d-blockで改行、mb-1で下との間隔を調整） %>
     <small class="text-muted d-block mb-1"><%= l post.created_at, format: :short %></small>
-    
-    <!-- コメント本文 -->
     <p class="card-text mb-1">
       <%= simple_format(h(post.content)) %>
     </p>
-
     <!-- 編集・削除リンク (投稿者本人のみ表示) -->
     <% if user_signed_in? && current_user == post.user %>
       <div class="text-end mt-2">
@@ -25,9 +17,6 @@
                     class: 'btn btn-sm btn-outline-danger' %>
       </div>
     <% end %>
-
-    <%# ★修正点2: hrのmt-3 (上マージン) を削除し、コメントとの間隔を詰める★ %>
     <hr>
   </div>
-
 <% end %>

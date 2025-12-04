@@ -1,6 +1,3 @@
-<%# app/views/posts/edit.html.erb %>
-
-<%# Turbo Frameで囲むことで、編集ボタンが押されたときにこの部分だけが差し替わります %>
 <turbo-frame id="post-<%= @post.id %>">
   <div class="p-3 border rounded-lg shadow-sm bg-gray-50">
     <h5 class="mb-3 text-sm font-semibold">コメント編集</h5>
@@ -28,8 +25,6 @@
 
       <div class="flex justify-end space-x-2">
         <%= f.submit "更新する", class: "btn btn-primary" %>
-        <%# ★修正点: キャンセルボタンのリンク先を@postに変更し、method: :getを指定。★ %>
-        <%# これにより、元のコメント表示パーシャル（_post.html.erb）に非同期で戻る %>
         <%= link_to "キャンセル", video_post_path(@video, @post), method: :get, class: "btn btn-secondary" %>
       </div>
     <% end %>

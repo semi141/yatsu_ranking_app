@@ -1,5 +1,3 @@
-# app/controllers/users/omniauth_callbacks_controller.rb
-
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def google_oauth2
     auth = request.env["omniauth.auth"]

@@ -1,5 +1,3 @@
-# test/test_helper.rb (最終決定版)
-
 ENV["RAILS_ENV"] ||= "test"
 require_relative "../config/environment"
 require "rails/test_help"

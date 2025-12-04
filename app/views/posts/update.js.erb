@@ -1,13 +1,8 @@
-<%# 1. 新しいコメントパーシャルをレンダリングします %>
-<%# _post.html.erb全体がTurbo Frameで囲まれているため、このHTMLをそのまま差し込みます %>
 var updated_post_html = "<%= j render(partial: 'posts/post', locals: { post: @post }) %>";
 
-<%# 2. 既存の要素（Turbo Frame）全体を新しいHTMLで置き換えます %>
 $("#post-<%= @post.id %>").replaceWith(updated_post_html);
 
-<%# 3. ページ上部に成功メッセージ（フラッシュメッセージ）を表示します %>
 $("#flash_messages").html('<div class="alert alert-success alert-dismissible fade show" role="alert"><%= j flash.now[:notice] %><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>');
-// フラッシュメッセージを数秒後に消す（任意）
 setTimeout(function(){ 
   $("#flash_messages").find(".alert").fadeOut("slow");
 }, 3000);

@@ -30,11 +30,10 @@ function sendToRails(videoId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
-        // "Authorization": ... ← こっち（ヘッダー）ではなく、下のbodyに入れます！
       },
       body: JSON.stringify({
         video_id: videoId,
-        token: API_TOKEN  // ★ここに追加！！これでRailsがparams[:token]で受け取れます！
+        token: API_TOKEN
       }),
       credentials: "omit"
     })

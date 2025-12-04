@@ -24,7 +24,6 @@ class RankingTest < ActionDispatch::IntegrationTest
       email: 'user_a@test.com', 
       password: 'password', 
       name: 'UserA', 
-      # 🔴 💥 この行を追加！
       api_token: SecureRandom.hex(16) 
   ) 
   @user_b = User.create!(email: 'user_b@test.com', password: 'password', name: 'UserB')

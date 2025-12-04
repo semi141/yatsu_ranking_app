@@ -73,7 +73,6 @@ class PostsController < ApplicationController
     # コメントを削除
     @post.destroy
     
-    # 非同期削除のためのJSレスポンスを返す
     respond_to do |format|
       format.html { redirect_to @video, notice: "コメントを削除しました。" }
       format.js # app/views/posts/destroy.js.erb を実行
