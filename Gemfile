@@ -25,7 +25,7 @@ gem "bootsnap", require: false
 gem 'devise'
 
 # Bootstrap
-gem 'bootstrap', '~> 5.3.2'
+gem 'bootstrap', '~> 5.3.8'
 gem 'sassc-rails'
 
 gem 'dotenv-rails', groups: [:development, :test]

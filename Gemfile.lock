@@ -87,7 +87,7 @@ GEM
     bindex (0.8.1)
     bootsnap (1.19.0)
       msgpack (~> 1.2)
-    bootstrap (5.3.5)
+    bootstrap (5.3.8)
       popper_js (>= 2.11.8, < 3)
     bootstrap_icons_rails (1.113.02)
       railties (>= 4.2)
@@ -441,7 +441,7 @@ PLATFORMS
 DEPENDENCIES
   acts-as-taggable-on
   bootsnap
-  bootstrap (~> 5.3.2)
+  bootstrap (~> 5.3.8)
   bootstrap_icons_rails
   brakeman
   capybara
